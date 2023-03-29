@@ -48,6 +48,9 @@ public class HomeFrame extends Application {
 
         Button loginButton = new Button("Login");
         loginButton.setFont(new Font(17.5));
+        
+        // listener for login //TODO replace this with some way to swap frames, would be easier if they were in the same class
+        loginButton.setOnAction(e -> System.out.println("figure out how to make this switch windows"));
 
         BorderPane loginContainer = new BorderPane();
         loginContainer.setCenter(loginButton);
