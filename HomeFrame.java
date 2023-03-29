@@ -35,25 +35,38 @@ public class HomeFrame extends Application {
     @Override
     public void start(Stage mainStage) { //TODO split this into smaller helper methods
 
-        Text welcomeHeader = new Text(40, 20, "Welcome!");
+        Text welcomeHeader = new Text("Welcome to the FoodFinder application!");
         welcomeHeader.setFont(new Font(20));
 
-        Text welcomeContent = new Text("This is an application developed to help those in need of food. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
-        welcomeContent.setWrappingWidth(300);
+        // Text welcomeContent = new Text("This is an application developed to help those in need of food. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
+        // welcomeContent.setWrappingWidth(300);
 
         BorderPane welcome = new BorderPane();
         // welcome.setPadding(new Insets(15));
         welcome.setTop(welcomeHeader);
-        welcome.setBottom(welcomeContent);
+        // welcome.setBottom(welcomeContent);
 
         Button loginButton = new Button("Login");
         loginButton.setFont(new Font(17.5));
 
-        Text something = new Text("This is where something else that is also important(i forget what) will go");
-        something.setWrappingWidth(300); //TODO consistent for now, but change this later
+        BorderPane loginContainer = new BorderPane();
+        loginContainer.setCenter(loginButton);
 
-        Text recentAdditionsHeader = new Text("This is where our recent additions will go...");
-        recentAdditionsHeader.setWrappingWidth(150);
+        Text summaryContent = new Text("This is an application developed to help those in need of food. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.\n\n"+
+                                    "We hope to support those in need of basic necessities with our application and organization.");
+        summaryContent.setWrappingWidth(500); //TODO consistent for now, but change this later
+
+        Text recentDonationsHeader = new Text("Recent Donations");
+        recentDonationsHeader.setFont(new Font(17.5));
+
+        VBox recentDonationsFeed = new VBox();
+        recentDonationsFeed.setBackground(new Background(new BackgroundFill(Color.DARKTURQUOISE, new CornerRadii(5), new Insets(5))));
+        recentDonationsFeed.setMinSize(200, 200);
+
+        BorderPane recentDonationsContainer = new BorderPane();
+        recentDonationsContainer.setTop(recentDonationsHeader);
+        recentDonationsContainer.setAlignment(recentDonationsHeader, Pos.TOP_CENTER);
+        recentDonationsContainer.setCenter(recentDonationsFeed);
 
         GridPane mainPane = new GridPane(); //creates the main pane with its settings
         mainPane.setPadding(new Insets(20));
@@ -64,9 +77,9 @@ public class HomeFrame extends Application {
         // mainPane.setGridLinesVisible(true); //TODO take this out when this is finished entirely
 
         mainPane.add(welcome,0,0);
-        mainPane.add(loginButton, 1, 0);
-        mainPane.add(something, 0, 1);
-        mainPane.add(recentAdditionsHeader, 1, 1);
+        mainPane.add(loginContainer, 1, 0);
+        mainPane.add(summaryContent, 0, 1);
+        mainPane.add(recentDonationsContainer, 1, 1);
 
         Scene homeScene = new Scene(mainPane);
 
