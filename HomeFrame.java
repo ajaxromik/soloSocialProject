@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,13 +28,22 @@ public class HomeFrame extends Application {
     }
 
     /**
-     * Starts the UI for the home frame
+     * Called a separate method in order to be modular.
+     * 
+     * @param mainStage The stage to add the home page onto.
+     */
+    @Override
+    public void start(Stage mainStage) {
+        buildHomePage(mainStage);
+    }
+
+    /**
+     * Allows the driver to access the home page
      * 
      * @param mainStage The stage of the application
      * @author William Carr
      */
-    @Override
-    public void start(Stage mainStage) { //TODO split this into smaller helper methods
+    public static void buildHomePage(Stage mainStage) { //TODO split this into smaller helper methods
 
         Text welcomeHeader = new Text("Welcome to the FoodFinder application!");
         welcomeHeader.setFont(new Font(20));
@@ -50,7 +60,10 @@ public class HomeFrame extends Application {
         loginButton.setFont(new Font(17.5));
         
         // listener for login //TODO replace this with some way to swap frames, would be easier if they were in the same class
-        loginButton.setOnAction(e -> System.out.println("figure out how to make this switch windows"));
+        loginButton.setOnAction(e -> {
+            System.out.println("switch windows");
+            Login_Frame.buildLoginPage(mainStage);
+        });
 
         BorderPane loginContainer = new BorderPane();
         loginContainer.setCenter(loginButton);
@@ -68,7 +81,7 @@ public class HomeFrame extends Application {
 
         BorderPane recentDonationsContainer = new BorderPane();
         recentDonationsContainer.setTop(recentDonationsHeader);
-        recentDonationsContainer.setAlignment(recentDonationsHeader, Pos.TOP_CENTER);
+        BorderPane.setAlignment(recentDonationsHeader, Pos.TOP_CENTER);
         recentDonationsContainer.setCenter(recentDonationsFeed);
 
         GridPane mainPane = new GridPane(); //creates the main pane with its settings

@@ -12,12 +12,23 @@ import javafx.stage.Stage;
  * @author Mary C. Moor
  */
 public class Login_Frame extends Application{
+    
     public static void main(String[] args) {
               launch(args);
     }
     
     @Override
     public void start(Stage primaryStage) {
+        buildLoginPage(primaryStage);
+    }
+
+    /**
+     * Allows the driver to access the login page
+     * 
+     * @author Mary C. Moor, William Carr
+     * @param primaryStage
+     */
+    public static void buildLoginPage(Stage primaryStage) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPadding(new Insets(10));
         //Welcome message
