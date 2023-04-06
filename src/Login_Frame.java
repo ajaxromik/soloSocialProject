@@ -9,10 +9,11 @@ import javafx.stage.Stage;
 
 /**
  * This Class is the login frame of our appliaction. This is where the user will enter in their login and password 
- * @author Mary C. Moor
+ * @author Mary C. Moor, William Carr
  */
 public class Login_Frame extends Application{
 
+    // ----- testing methods -----
     public static void main(String[] args) {
               launch(args);
     }
@@ -21,11 +22,21 @@ public class Login_Frame extends Application{
     public void start(Stage primaryStage) {
         buildLoginPage(primaryStage);
     }
+
+    // ----- end of testing methods -----
     
-    // had to move this here so that login button is instantiated by the time GUI driver adds a listener
-    // loginButton should never be modified, if it needs to be then do it static
+    /**
+     * moved so login button is instantiated by the time GUI driver adds a listener
+     * loginButton should never be modified, do it static if you must
+     */
     private static Button loginButton = new Button("LOGIN");
 
+    /**
+     * Returns the loginButton
+     * 
+     * @author William Carr
+     * @return loginButton field
+     */
     public static Button getLoginButton() {
         return loginButton;
     }
@@ -34,7 +45,7 @@ public class Login_Frame extends Application{
      * Allows the driver to access the login page. 
      * Creates a new login page every time, so listeners should be added to the buttons after this method is called
      * 
-     * @author Mary C. Moor, William Carr
+     * @author Mary C. Moor
      * @param primaryStage
      */
     public static void buildLoginPage(Stage primaryStage) {
