@@ -30,6 +30,7 @@ public class FoodPantry extends User{
      * checks if an item is in the inventory and they have at least one of it based off the name.
      * @param itemName the name item.
      * @return true if the inventory has an item false if not.
+     * @author Julius A. Leone
      */
     public boolean inInventory(String itemName){
         for (Item item : inventory.keySet()) {
@@ -46,6 +47,7 @@ public class FoodPantry extends User{
      * checks if an item is in the inventory and they have at least one of it based off the type.
      * @param itemType the type of item.
      * @return true if the inventory has an item false if not.
+     * @author Julius A. Leone
      */
     public boolean inInventory(ItemType itemType){
         for (Item item : inventory.keySet()) {
@@ -63,6 +65,7 @@ public class FoodPantry extends User{
      * @param itemType the type of the item.
      * @param itemName the name of the item.
      * @param quantity the amount of the item.
+     * @author Julius A. Leone
      */
     public void addToInventory(String itemType, String itemName, int quantity){
         Item itemToAdd = new Item(itemType, itemName);
@@ -70,6 +73,12 @@ public class FoodPantry extends User{
         inventory.putIfAbsent(itemToAdd, quantity);
     }
 
+    /**
+     * removes an item from the inventory.
+     * @param itemType the type of the item being removed.
+     * @param itemName the name of the item being removed.
+     * @autho Julius A. Leone
+     */
     public void removeFromInventory(String itemType, String itemName){
         Item itemToRemove = new Item(itemType, itemName);
         if(inventory.remove(itemToRemove) == null){
@@ -78,6 +87,12 @@ public class FoodPantry extends User{
         
     }
 
+    /**
+     * Sets the quantity of an item.
+     * @param itemType the type of the item
+     * @param itemName the name of the item
+     * @param quantity the new desired quanity of the item
+     */
     public void setItemQuantity(String itemType, String itemName, int quantity){
         Item itemToChange = new Item(itemType, itemName);
         if(inventory.get(itemToChange) == null){
@@ -86,6 +101,14 @@ public class FoodPantry extends User{
         else{
             inventory.put(itemToChange, quantity);
         }
+    }
+
+    /**
+     * gets the details of the food pantry.
+     * @return
+     */
+    public String getDetails(){
+        return "";
     }
 
 
