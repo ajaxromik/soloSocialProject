@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  * @author Mary C. Moor
  */
 public class Login_Frame extends Application{
-    
+
     public static void main(String[] args) {
               launch(args);
     }
@@ -21,9 +21,18 @@ public class Login_Frame extends Application{
     public void start(Stage primaryStage) {
         buildLoginPage(primaryStage);
     }
+    
+    // had to move this here so that login button is instantiated by the time GUI driver adds a listener
+    // loginButton should never be modified, if it needs to be then do it static
+    private static Button loginButton = new Button("LOGIN");
+
+    public static Button getLoginButton() {
+        return loginButton;
+    }
 
     /**
-     * Allows the driver to access the login page
+     * Allows the driver to access the login page. 
+     * Creates a new login page every time, so listeners should be added to the buttons after this method is called
      * 
      * @author Mary C. Moor, William Carr
      * @param primaryStage
@@ -66,7 +75,7 @@ public class Login_Frame extends Application{
         HBox login = new HBox();
         login.setAlignment(Pos.BOTTOM_RIGHT);
         login.setSpacing(10);
-        login.getChildren().addAll(new Button("LOGIN"));
+        login.getChildren().addAll(loginButton);
 
         VBox centerBox = new VBox();
         centerBox.setAlignment(Pos.CENTER);

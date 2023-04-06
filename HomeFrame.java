@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,35 +15,107 @@ import javafx.stage.Stage;
  * @author William Carr
  * @version 3.28.2023
  */
-public class HomeFrame extends Application {
+public class HomeFrame extends Application { // TODO probably want to remove "extends Application" and use driver/testing class
 
+    // ----- testing functions -----
     /**
      * Starts the program!
-     * @param args The arguments used to start the program from the command line
      * @author William Carr
+     * @param args The arguments used to start the program from the command line
      */
     public static void main(String[] args) {
         launch(args);
     }
 
     /**
-     * Called a separate method in order to be modular.
+     * Makes it possible to test this class.
+     * Keep in mind this is purely for UI appearance testing and it has no functionality.
      * 
+     * @author William Carr
      * @param mainStage The stage to add the home page onto.
      */
     @Override
     public void start(Stage mainStage) {
-        buildHomePage(mainStage);
+        buildHomePage();
+        setStage(mainStage);
+    }
+    
+    /**
+     * Sets the stage for the driver
+     * 
+     * @author William Carr
+     * @param stage
+     */
+    private void setStage(Stage stage) {
+        stage.setTitle("FoodFinder v0.1");
+		stage.setScene(homeScene);
+		stage.show();
+    }
+
+    // ----- for overarching project -----
+    //private instance variables allow for easier access to important parts of the Scene
+    private Scene homeScene;
+    private VBox recentDonationsFeed;
+    private Button loginButton;
+
+    /**
+     * Creates a HomeFrame Object to store the homeScene and adds it to a stage
+     * 
+     * @author William Carr
+     */
+    public HomeFrame(Stage stage) {
+        buildHomePage();
+        setStage(stage);
+    }
+    
+    /**
+     * Creates a HomeFrame Object to store the homeScene that the application will use
+     * 
+     * @author William Carr
+     */
+    public HomeFrame() {
+        buildHomePage();
     }
 
     /**
-     * Allows the driver to access the home page
+     * Returns the homeScene
      * 
-     * @param mainStage The stage of the application
      * @author William Carr
+     * @return homeScene field
      */
-    public static void buildHomePage(Stage mainStage) { //TODO split this into smaller helper methods
+    public Scene getScene() {
+        return homeScene;
+    }
 
+    /**
+     * Returns the recentDonationsFeed
+     * 
+     * @author William Carr
+     * @return recentDonationsFeed field
+     */
+    public VBox getDonationsFeed() {
+        return recentDonationsFeed;
+    }
+
+    /**
+     * Returns the loginButton
+     * 
+     * @author William Carr
+     * @return loginButton field
+     */
+    public Button getLoginButton() {
+        return loginButton;
+    }
+
+    /**
+     * Creates a home page for the object
+     * 
+     * @author William Carr
+     * @param mainStage The stage of the application
+     */
+    private void buildHomePage() { //TODO split this into smaller helper methods
+        
+        //creates welcome section(top left)
         Text welcomeHeader = new Text("Welcome to the FoodFinder application!");
         welcomeHeader.setFont(new Font(20));
 
@@ -56,26 +127,23 @@ public class HomeFrame extends Application {
         welcome.setTop(welcomeHeader);
         // welcome.setBottom(welcomeContent);
 
-        Button loginButton = new Button("Login");
+        //creates the login section(top right)
+        loginButton = new Button("Login");
         loginButton.setFont(new Font(17.5));
-        
-        // listener for login //TODO replace this with some way to swap frames, would be easier if they were in the same class
-        loginButton.setOnAction(e -> {
-            System.out.println("switch windows");
-            Login_Frame.buildLoginPage(mainStage);
-        });
 
         BorderPane loginContainer = new BorderPane();
         loginContainer.setCenter(loginButton);
 
+        // creates the summary(bottom left) //TODO this might need a Vbox container later to allow new buttons to appear below the summary
         Text summaryContent = new Text("This is an application developed to help those in need of food. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.\n\n"+
                                     "We hope to support those in need of basic necessities with our application and organization.");
         summaryContent.setWrappingWidth(500); //TODO consistent for now, but change this later
 
+        //creates the donations feed section(bottom right)
         Text recentDonationsHeader = new Text("Recent Donations");
         recentDonationsHeader.setFont(new Font(17.5));
 
-        VBox recentDonationsFeed = new VBox();
+        recentDonationsFeed = new VBox();
         recentDonationsFeed.setBackground(new Background(new BackgroundFill(Color.DARKTURQUOISE, new CornerRadii(5), new Insets(5))));
         recentDonationsFeed.setMinSize(200, 200);
 
@@ -84,7 +152,8 @@ public class HomeFrame extends Application {
         BorderPane.setAlignment(recentDonationsHeader, Pos.TOP_CENTER);
         recentDonationsContainer.setCenter(recentDonationsFeed);
 
-        GridPane mainPane = new GridPane(); //creates the main pane with its settings
+        //creates the main pane with its settings
+        GridPane mainPane = new GridPane();
         mainPane.setPadding(new Insets(20));
         mainPane.setMinSize(400, 200);
         mainPane.setVgap(10);
@@ -97,10 +166,7 @@ public class HomeFrame extends Application {
         mainPane.add(summaryContent, 0, 1);
         mainPane.add(recentDonationsContainer, 1, 1);
 
-        Scene homeScene = new Scene(mainPane);
-
-        mainStage.setTitle("FoodFinder v0.1");
-		mainStage.setScene(homeScene);
-		mainStage.show();
+        homeScene = new Scene(mainPane);
     }
+
 }
