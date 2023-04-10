@@ -60,6 +60,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     private VBox recentDonationsFeed;
     private Button loginButton;
 
+    private final int SUMMARY_WIDTH = 600;
     private final String BULLETPOINT = "\u2022";
 
     /**
@@ -123,22 +124,18 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         Text welcomeHeader = new Text("Welcome to the FoodFinder application!");
         welcomeHeader.setFont(new Font(20));
 
-        // Text welcomeContent = new Text("This is an application developed to help those in need of food or other basic necessities. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
-        // welcomeContent.setWrappingWidth(500);
-
         BorderPane welcome = new BorderPane();
-        // welcome.setPadding(new Insets(15));
         welcome.setTop(welcomeHeader);
-        // welcome.setBottom(welcomeContent);
 
         //creates the login section(top right)
         loginButton = new Button("Login");
         loginButton.setFont(new Font(17.5));
+        loginButton.setStyle("-fx-background-color: #89cff0; -fx-fill: blue;");
 
         BorderPane loginContainer = new BorderPane();
         loginContainer.setCenter(loginButton);
 
-        // creates the summary(bottom left) //TODO this might need a Vbox container later to allow new buttons to appear below the summary
+        // creates the summary(bottom left)
         Text summaryContent = new Text("We hope to support those in need of basic necessities with our application and organization. "+
             "This app was designed with simplicity and accessibility in mind, helping users locate nearby food and essentials quickly and easily.\n\n"+
             "Key Features:\n"+
@@ -146,8 +143,8 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
             "\t"+BULLETPOINT+" Connect with volunteers and organizations to donate food or offer your services\n"+
             "\t"+BULLETPOINT+" Discover the types of food available at food banks and distribution centers in your area\n"+
             "\nFeel free to contact us with any feedback, comments, or questions about the FoodFinder app at customersupport@foodfinder.org. "+
-            "This service was brought to you by Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
-        summaryContent.setWrappingWidth(600); //TODO consistent for now, but change this later
+            "This service was brought to you by Mary Moor, Julius Leone, Alexa Gonzalez, and William Carr.");
+        summaryContent.setWrappingWidth(SUMMARY_WIDTH);
 
         summaryAndButtons = new VBox();
         summaryAndButtons.getChildren().addAll(summaryContent);
