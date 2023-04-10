@@ -38,6 +38,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     public void start(Stage mainStage) {
         buildHomePage();
         setStage(mainStage);
+        getLoginButton().setOnAction(e -> System.out.println("login button pressed"));
     }
     
     /**
@@ -55,8 +56,11 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     // ----- for overarching project -----
     //private instance variables allow for easier access to important parts of the Scene
     private Scene homeScene;
+    private VBox summaryAndButtons;
     private VBox recentDonationsFeed;
     private Button loginButton;
+
+    private final String BULLETPOINT = "\u2022";
 
     /**
      * Creates a HomeFrame Object to store the homeScene and adds it to a stage
@@ -119,8 +123,8 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         Text welcomeHeader = new Text("Welcome to the FoodFinder application!");
         welcomeHeader.setFont(new Font(20));
 
-        // Text welcomeContent = new Text("This is an application developed to help those in need of food. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
-        // welcomeContent.setWrappingWidth(300);
+        // Text welcomeContent = new Text("This is an application developed to help those in need of food or other basic necessities. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
+        // welcomeContent.setWrappingWidth(500);
 
         BorderPane welcome = new BorderPane();
         // welcome.setPadding(new Insets(15));
@@ -135,9 +139,19 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         loginContainer.setCenter(loginButton);
 
         // creates the summary(bottom left) //TODO this might need a Vbox container later to allow new buttons to appear below the summary
-        Text summaryContent = new Text("This is an application developed to help those in need of food. The creators are Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.\n\n"+
-                                    "We hope to support those in need of basic necessities with our application and organization.");
-        summaryContent.setWrappingWidth(500); //TODO consistent for now, but change this later
+        Text summaryContent = new Text("We hope to support those in need of basic necessities with our application and organization. "+
+            "This app was designed with simplicity and accessibility in mind, helping users locate nearby food and essentials quickly and easily.\n\n"+
+            "Key Features:\n"+
+            "\t"+BULLETPOINT+" Find food banks in your area with real-time updates to ensure you never miss an opportunity for a nutritious meal\n"+
+            "\t"+BULLETPOINT+" Connect with volunteers and organizations to donate food or offer your services\n"+
+            "\t"+BULLETPOINT+" Discover the types of food available at food banks and distribution centers in your area\n"+
+            "\nFeel free to contact us with any feedback, comments, or questions about the FoodFinder app at customersupport@foodfinder.org. "+
+            "This service was brought to you by Mary Moore, Julius Leone, Alexa Gonzales, and William Carr.");
+        summaryContent.setWrappingWidth(600); //TODO consistent for now, but change this later
+
+        summaryAndButtons = new VBox();
+        summaryAndButtons.getChildren().addAll(summaryContent);
+        summaryAndButtons.setAlignment(Pos.TOP_LEFT);
 
         //creates the donations feed section(bottom right)
         Text recentDonationsHeader = new Text("Recent Donations");
@@ -163,7 +177,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
 
         mainPane.add(welcome,0,0);
         mainPane.add(loginContainer, 1, 0);
-        mainPane.add(summaryContent, 0, 1);
+        mainPane.add(summaryAndButtons, 0, 1);
         mainPane.add(recentDonationsContainer, 1, 1);
 
         homeScene = new Scene(mainPane);
