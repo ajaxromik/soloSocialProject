@@ -113,10 +113,11 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     }
 
     /**
-     * Creates a home page for the object
+     * Creates a home page for the object. 
+     * This method should not be called more than once per object, or it will reset every field to their starting values.
+     * (it would get rid of any listeners)
      * 
      * @author William Carr
-     * @param mainStage The stage of the application
      */
     private void buildHomePage() { //TODO split this into smaller helper methods
         
@@ -130,10 +131,10 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         //creates the login section(top right)
         loginButton = new Button("Login");
         loginButton.setFont(new Font(17.5));
-        loginButton.setStyle("-fx-background-color: #89cff0; -fx-fill: blue;");
+        // loginButton.setStyle("-fx-background-color: #BBBBBB; -fx-background-radius: 0;"); // little test of playing with buttons
 
         BorderPane loginContainer = new BorderPane();
-        loginContainer.setCenter(loginButton);
+        loginContainer.setRight(loginButton);
 
         // creates the summary(bottom left)
         Text summaryContent = new Text("We hope to support those in need of basic necessities with our application and organization. "+
@@ -170,7 +171,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         mainPane.setVgap(10);
         mainPane.setHgap(20);
         mainPane.setAlignment(Pos.CENTER);
-        // mainPane.setGridLinesVisible(true); //TODO take this out when this is finished entirely
+        // mainPane.setGridLinesVisible(true); //TODO take this out when the application as a whole is finished entirely
 
         mainPane.add(welcome,0,0);
         mainPane.add(loginContainer, 1, 0);
