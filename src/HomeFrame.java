@@ -1,7 +1,11 @@
+import java.util.Set;
+import java.util.List;
+import java.util.HashSet;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -37,6 +41,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     @Override
     public void start(Stage mainStage) {
         buildHomePage();
+        // addPermittedButtons(null);
         setStage(mainStage);
         getLoginButton().setOnAction(e -> System.out.println("login button pressed"));
     }
@@ -56,9 +61,15 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     // ----- for overarching project -----
     //private instance variables allow for easier access to important parts of the Scene
     private Scene homeScene;
-    private VBox summaryAndButtons;
+    private VBox summaryContainer;
     private VBox recentDonationsFeed;
     private Button loginButton;
+
+    private HBox permittedButtons;
+    private Set<ButtonPermission> perms = new HashSet<>(); //by default user has no permissions
+    private Button searchButton = new Button("Search");
+    private Button donateButton = new Button("Donate");
+    private Button editButton = new Button("Edit Location Info");
 
     private final int SUMMARY_WIDTH = 600;
     private final String BULLETPOINT = "\u2022";
@@ -113,6 +124,64 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     }
 
     /**
+     * Returns the searchButton
+     * 
+     * @author William Carr
+     * @return searchButton field
+     */
+    public Button getSearchButton() {
+        return searchButton;
+    }
+
+    /**
+     * Returns the donateButton
+     * 
+     * @author William Carr
+     * @return donateButton field
+     */
+    public Button getDonateButton() {
+        return donateButton;
+    }
+
+    /**
+     * Returns the editButton
+     * 
+     * @author William Carr
+     * @return editButton field
+     */
+    public Button getEditButton() {
+        return editButton;
+    }
+
+    /**
+     * Adds the permitted buttons to the Home screen
+     * 
+     * @author William Carr
+     * @param perms The list of ButtonPermissions to use. May not contain any duplicates. Cannot be null.
+     */
+    public void updatePermittedButtons(Set<ButtonPermission> perms) {
+        //if permissions are different, make the buttons correct
+        if(!this.perms.equals(perms)){
+            this.perms = perms;
+            List<Node> children = permittedButtons.getChildren();
+            children.clear();
+            //add the search button if they are logged in
+            if(!perms.isEmpty())
+                children.add(searchButton); // everyone gets to search
+            for(ButtonPermission perm : perms){
+                switch(perm){ //have to have the perms if you want the add or edit buttons
+                    case EDIT:
+                        children.add(editButton);
+                        break;
+                    case DONATE:
+                        children.add(donateButton);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
      * Creates a home page for the object. 
      * This method should not be called more than once per object, or it will reset every field to their starting values.
      * (it would get rid of any listeners)
@@ -147,9 +216,13 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
             "This service was brought to you by Mary Moor, Julius Leone, Alexa Gonzalez, and William Carr.");
         summaryContent.setWrappingWidth(SUMMARY_WIDTH);
 
-        summaryAndButtons = new VBox();
-        summaryAndButtons.getChildren().addAll(summaryContent);
-        summaryAndButtons.setAlignment(Pos.TOP_LEFT);
+        //creates the buttons for below the summary
+        permittedButtons = new HBox(20);
+
+        summaryContainer = new VBox(10);
+        // summaryContainer.setPadding(new Insets(10));
+        summaryContainer.getChildren().addAll(summaryContent, permittedButtons);
+        summaryContainer.setAlignment(Pos.TOP_LEFT);
 
         //creates the donations feed section(bottom right)
         Text recentDonationsHeader = new Text("Recent Donations");
@@ -175,7 +248,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
 
         mainPane.add(welcome,0,0);
         mainPane.add(loginContainer, 1, 0);
-        mainPane.add(summaryAndButtons, 0, 1);
+        mainPane.add(summaryContainer, 0, 1);
         mainPane.add(recentDonationsContainer, 1, 1);
 
         homeScene = new Scene(mainPane);

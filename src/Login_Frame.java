@@ -6,6 +6,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This Class is the login frame of our appliaction. This is where the user will enter in their login and password 
@@ -20,19 +23,63 @@ public class Login_Frame extends Application{
     
     @Override
     public void start(Stage primaryStage) {
-        buildLoginPage(primaryStage);
+        buildLoginPage(primaryStage, new ArrayList<User>());
     }
 
     // ----- end of testing methods -----
     
     /**
-     * moved so login button is instantiated by the time GUI driver adds a listener
+     * moved so back button is instantiated by the time GUI driver adds a listener
      * loginButton should never be modified, do it static if you must
      */
-    private static Button loginButton = new Button("LOGIN");
+    private static Button backButton = new Button("Back");
+    private static Button loginButton;
+    private static TextField userField; // userField will be modified TODO add protection to userField
+    private static PasswordField passField; // passField will be modified TODO add protection to passField
+    private static User loggedInUser;
+
 
     /**
-     * Returns the loginButton
+     * Returns the backButton
+     * 
+     * @author William Carr
+     * @return backButton field
+     */
+    public static Button getBackButton() {
+        return backButton;
+    }
+
+    /**
+     * Returns the loggedInUser. If nobody is logged in, will be null. Must do a 
+     * 
+     * @author William Carr
+     * @return loggedInUser field
+     */
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    /**
+     * If loggedInUser is not null, we are currently logged in
+     * 
+     * @author William Carr
+     * @return True if logged in, otherwise false
+     */
+    public static boolean isLoggedIn() {
+        return loggedInUser != null;
+    }
+
+    /**
+     * Logs out of the current application's user if there is one
+     * 
+     * @author William Carr
+     */
+    public static void logout() {
+        loggedInUser = null;
+    }
+
+    /**
+     * Returns the loginButton //TODO decide when finished if this is necessary
      * 
      * @author William Carr
      * @return loginButton field
@@ -45,10 +92,10 @@ public class Login_Frame extends Application{
      * Allows the driver to access the login page. 
      * Creates a new login page every time, so listeners should be added to the buttons after this method is called
      * 
-     * @author Mary C. Moor
+     * @author Mary C. Moor, William Carr
      * @param primaryStage
      */
-    public static void buildLoginPage(Stage primaryStage) {
+    public static void buildLoginPage(Stage primaryStage, List<User> users) {
         BorderPane borderPane = new BorderPane();
         borderPane.setPadding(new Insets(10));
         //Welcome message
@@ -61,19 +108,21 @@ public class Login_Frame extends Application{
         HBox username = new HBox();
         username.setAlignment(Pos.CENTER);
         username.setSpacing(20);
-        username.getChildren().addAll(new Label("Username:"), new TextField());
+        userField = new TextField();
+        username.getChildren().addAll(new Label("Username:"), userField);
         
         //Password
         HBox password = new HBox();
         password.setAlignment(Pos.CENTER);
         password.setSpacing(20);
-        password.getChildren().addAll(new Label("Password:"), new PasswordField());
+        passField = new PasswordField();
+        password.getChildren().addAll(new Label("Password:"), passField);
 
-        //Forgot username/password
+        //Forgot username/password          //keep in mind the users have no email
         HBox reset = new HBox();
         reset.setAlignment(Pos.BOTTOM_LEFT);
         reset.setSpacing(100);
-        reset.getChildren().addAll(new Label("Having trouble: "), new Button("Reset"));
+        reset.getChildren().addAll(new Label("Having trouble: "), new Button("Reset")); 
 
         //Register/ new user
         HBox register = new HBox();
@@ -83,10 +132,11 @@ public class Login_Frame extends Application{
 
 
         //login
-        HBox login = new HBox();
-        login.setAlignment(Pos.BOTTOM_RIGHT);
-        login.setSpacing(10);
-        login.getChildren().addAll(loginButton);
+        BorderPane login = new BorderPane();
+        loginButton = new Button("LOGIN");
+        loginButton.setOnAction(e -> loginPress(users));
+        login.setLeft(backButton);
+        login.setRight(loginButton);
 
         VBox centerBox = new VBox();
         centerBox.setAlignment(Pos.CENTER);
@@ -110,6 +160,26 @@ public class Login_Frame extends Application{
         Scene scene = new Scene(borderPane, 400, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    /**
+     * Uses streaming with lambda expressions to find the user when logging in
+     * 
+     * @author William Carr
+     * @param users The list of users from the database
+     */
+    private static void loginPress(List<User> users) {
+        Optional<User> user = 
+        users.parallelStream()
+             .filter(u -> u.checkLoginInfo(userField.getText(), passField.getText()))
+             .findFirst();
+        
+        if(user.isPresent()) {
+            loggedInUser = user.get();
+            backButton.fire(); //uses the backButton's onEvent
+        } else {
+            System.out.println("Please try again, no user was found");
+        }
     }
 
 }

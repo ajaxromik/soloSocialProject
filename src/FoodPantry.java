@@ -1,6 +1,7 @@
 import java.util.HashMap;
-
-import javax.print.attribute.HashPrintJobAttributeSet;
+import java.util.HashSet;
+import java.util.Set;
+import javax.print.attribute.HashPrintJobAttributeSet; //TODO why is this here?
 
 /**
  * An account for a food pantry.
@@ -111,7 +112,18 @@ public class FoodPantry extends User{
         return "";
     }
 
-
+    /**
+     * Returns the FoodPantry ButtonPermissions
+     * 
+     * @author William Carr
+     * @return The ArrayList of ButtonPermission enums
+     */
+    public Set<ButtonPermission> getButtonPermissions() {
+        HashSet<ButtonPermission> perms = new HashSet<>();
+        perms.add(ButtonPermission.EDIT);
+        // perms.add(ButtonPermission.DONATE); //TODO remove this, testing
+        return perms;
+    }
 
 
 

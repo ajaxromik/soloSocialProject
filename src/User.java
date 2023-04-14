@@ -1,3 +1,5 @@
+import java.util.Set;
+
 /**
  * A class representing a user account of the application.
  * @author Julius A. Leone
@@ -50,6 +52,13 @@ abstract public class User{
         this.latitude = latitude;
     }
 
+    /** //TODO if you need to put this into a different class, copy the version from ****FoodPantry**** and change accordingly
+     * Every user has specific permissions to buttons, which get get from here
+     * 
+     * @author William Carr
+     * @return The set of ButtonPermission enums
+     */
+    abstract public Set<ButtonPermission> getButtonPermissions();
 
     /**
      * Checks an entered username and password
