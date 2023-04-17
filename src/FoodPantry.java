@@ -1,6 +1,8 @@
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.print.attribute.HashPrintJobAttributeSet; //TODO why is this here?
 
 /**
@@ -35,7 +37,7 @@ public class FoodPantry extends User{
      */
     public boolean inInventory(String itemName){
         for (Item item : inventory.keySet()) {
-            if(item.getItemName().equals(itemName) && inventory.get(item) != 0){
+            if(item.getItemName().equalsIgnoreCase(itemName) && inventory.get(item) != 0){
                 //if the item is in the inventory and has stock.
                 return true;
             }
@@ -83,7 +85,7 @@ public class FoodPantry extends User{
     public void removeFromInventory(String itemType, String itemName){
         Item itemToRemove = new Item(itemType, itemName);
         if(inventory.remove(itemToRemove) == null){
-            //TO DO tell user nothing was removed
+            logger.log(Level.WARNING, "Item not in inventory.");
         }
         
     }
@@ -93,11 +95,12 @@ public class FoodPantry extends User{
      * @param itemType the type of the item
      * @param itemName the name of the item
      * @param quantity the new desired quanity of the item
+     * @author Julius A. Leone
      */
     public void setItemQuantity(String itemType, String itemName, int quantity){
         Item itemToChange = new Item(itemType, itemName);
         if(inventory.get(itemToChange) == null){
-            //TODO tell user no such item exists.
+            logger.log(Level.WARNING, "Item not in inventory.");
         }
         else{
             inventory.put(itemToChange, quantity);
@@ -106,7 +109,8 @@ public class FoodPantry extends User{
 
     /**
      * gets the details of the food pantry.
-     * @return
+     * @return the details of the food pantry.
+     * @author Julius A. Leone
      */
     public String getDetails(){
         return "";
