@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -97,7 +98,11 @@ public class CreateUser_Frame extends Application {
                 statusLbl.setText("User already exists!");
                 return;
             }
-
+            
+            if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
+                statusLbl.setText("Fields can not be blank!");
+                return;
+            }
             userMap.put(userNameTxt, pwTxt);
             statusLbl.setText("User created successfully!");
         });
