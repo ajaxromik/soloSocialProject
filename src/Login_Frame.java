@@ -30,12 +30,12 @@ public class Login_Frame extends Application{
     
     /**
      * moved so back button is instantiated by the time GUI driver adds a listener
-     * loginButton should never be modified, do it static if you must
+     * backButton should never be modified besides this and the driver's listener, do it static if you must
      */
     private static Button backButton = new Button("Back");
     private static Button loginButton;
-    private static TextField userField; // userField will be modified TODO add protection to userField
-    private static PasswordField passField; // passField will be modified TODO add protection to passField
+    private static TextField userField; // avoids passing parameters to the loginPress method
+    private static PasswordField passField; // ditto of comment above; should never have more than one Login_Frame at a time
     private static User loggedInUser;
 
 
@@ -79,7 +79,7 @@ public class Login_Frame extends Application{
     }
 
     /**
-     * Returns the loginButton //TODO decide when finished if this is necessary
+     * Returns the loginButton //TODO probably get rid of this; login handles its own button in the loginPress() method
      * 
      * @author William Carr
      * @return loginButton field
@@ -131,7 +131,7 @@ public class Login_Frame extends Application{
         register.getChildren().addAll(new Label("New user: "), new Button("Create Account"));
 
 
-        //login
+        //login and back button
         BorderPane login = new BorderPane();
         loginButton = new Button("LOGIN");
         loginButton.setOnAction(e -> loginPress(users));

@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +42,8 @@ public class GUIdriver extends Application{
                 home.getLoginButton().setText("Log out of: "+Login_Frame.getLoggedInUser().getUsername());
                 home.getLoginButton().setOnAction(event -> {Login_Frame.logout(); Login_Frame.buildLoginPage(mainStage, users);}); 
             } else { // how we change the home frame if we are not logged in
-                home.updatePermittedButtons(new HashSet<>());
-                home.getLoginButton().setText("Login");
+                home.updatePermittedButtons(new HashSet<>());//sets HomeFrame's permissions to a new empty set
+                home.getLoginButton().setText("Login");//resets the text since it was modified
                 home.getLoginButton().setOnAction(event -> Login_Frame.buildLoginPage(mainStage, users));
             }
             // set the scene at the end because if we do it before, it'll change the sizing after swapping scenes
@@ -60,7 +59,10 @@ public class GUIdriver extends Application{
      * @return The list of users on file for our organization
      */
     private ArrayList<User> getUsers() {
-        return new ArrayList(Arrays.asList(new FoodPantry("admin", "minad", 0, 0, "Testing FoodPantry")));
+        return new ArrayList<User>(Arrays.asList(
+            new FoodPantry("admin", "minad", 0, 0, "Testing FoodPantry"), 
+            new FoodPantry("regularUser", "imAUser", 0, 0, "Testing FoodPantry")
+        ));
     }
 
 }
