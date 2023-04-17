@@ -11,6 +11,8 @@ import javax.print.attribute.HashPrintJobAttributeSet; //TODO why is this here?
  * @version 4.6.2023
  */
 public class FoodPantry extends User{
+    private static final Logger logger = Logger.getLogger("FoodPantry");
+
     private HashMap<Item, Integer> inventory = new HashMap<Item, Integer>();
     private String name;
 
