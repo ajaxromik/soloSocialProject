@@ -2,7 +2,7 @@ import java.util.Set;
 
 /**
  * A class representing a user account of the application.
- * @author Julius A. Leone
+ * @author Julius A. Leone, William Carr
  * @version 4.6.2023
  */
 abstract public class User{
@@ -12,6 +12,14 @@ abstract public class User{
     private double longitude;
     private double latitude;
 
+    /**
+     * Sets up standard user attributes
+     * @param username the login username for the user
+     * @param password the login password for the user
+     * @param longitude the longitudinal location of the user
+     * @param latitude the laitudinal location of the user
+     * @author Julius A. Leone
+     */
     public User(String username, String password, double longitude, double latitude){
         this.username = username;
         this.password = password;
@@ -19,7 +27,7 @@ abstract public class User{
         this.latitude = latitude;
     }
 
-
+    // auto generated getters and setters.
     public String getUsername() {
         return this.username;
     }
@@ -64,7 +72,7 @@ abstract public class User{
      * Checks an entered username and password
      * @param attemptedUsername Username being entered.
      * @param attempetedPassword Password being entered.
-     * @return
+     * @return if the username and password match
      */
     public boolean checkLoginInfo(String attemptedUsername, String attempetedPassword){
         return (username.equals(attemptedUsername) && password.equals(attempetedPassword));
@@ -75,7 +83,8 @@ abstract public class User{
      * Gives a users distance from a location.
      * @param latitude The longitude of the location.
      * @param longitude The latitude of the location.
-     * @return
+     * @return the distance between the location of the user and location.
+     * @author Julius. A Leone
      */
     public double distanceFrom(double latitude, double longitude) {
         double earthRadius = 3958.75; // miles (or 6371.0 kilometers)

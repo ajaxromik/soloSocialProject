@@ -23,12 +23,6 @@ public class Item {
     }
 
     @Override
-    public int hashCode(){
-        int result = itemName.hashCode() + itemType.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString(){
         return "item name:" + itemName + "\nitem type:" + itemType;
     }

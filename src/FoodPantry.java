@@ -84,8 +84,7 @@ public class FoodPantry extends User{
      * @param itemName the name of the item being removed.
      * @autho Julius A. Leone
      */
-    public void removeFromInventory(String itemType, String itemName){
-        Item itemToRemove = new Item(itemType, itemName);
+    public void removeFromInventory(Item itemToRemove){
         if(inventory.remove(itemToRemove) == null){
             logger.log(Level.WARNING, "Item not in inventory.");
         }
@@ -99,8 +98,7 @@ public class FoodPantry extends User{
      * @param quantity the new desired quanity of the item
      * @author Julius A. Leone
      */
-    public void setItemQuantity(String itemType, String itemName, int quantity){
-        Item itemToChange = new Item(itemType, itemName);
+    public void setItemQuantity(Item itemToChange, int quantity){
         if(inventory.get(itemToChange) == null){
             logger.log(Level.WARNING, "Item not in inventory.");
         }
