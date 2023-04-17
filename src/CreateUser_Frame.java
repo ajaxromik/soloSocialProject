@@ -12,6 +12,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import java.util.HashMap;
 
+//TODO: Fix when nothing in username or password it dose not create a new user! 
+
 /**
  * The CreateUser_Frame will creates a login page with fields for the user's 
  * name, password and re-entered password. Upon clicking the "Create" button,
