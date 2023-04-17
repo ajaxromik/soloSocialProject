@@ -3,12 +3,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * This Class is the login frame of our appliaction. This is where the user will enter in their login and password 
@@ -166,19 +170,20 @@ public class Login_Frame extends Application{
      * Uses streaming with lambda expressions to find the user when logging in
      * 
      * @author William Carr
+     * @editedBy Mary C. Moor
      * @param users The list of users from the database
      */
     private static void loginPress(List<User> users) {
-        Optional<User> user = 
-        users.parallelStream()
-             .filter(u -> u.checkLoginInfo(userField.getText(), passField.getText()))
-             .findFirst();
-        
-        if(user.isPresent()) {
+        Optional<User> user = users.parallelStream()
+                .filter(u -> u.checkLoginInfo(userField.getText(), passField.getText()))
+                .findFirst();
+    
+        if (user.isPresent()) {
             loggedInUser = user.get();
-            backButton.fire(); //uses the backButton's onEvent
+            backButton.fire(); // uses the backButton's onEvent
         } else {
-            System.out.println("Please try again, no user was found");
+            Alert alert = new Alert(AlertType.ERROR, "Please try again, no user was found", ButtonType.OK);
+            alert.showAndWait();
         }
     }
 
