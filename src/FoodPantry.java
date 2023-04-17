@@ -129,6 +129,13 @@ public class FoodPantry extends User{
         return perms;
     }
 
+    /**
+     * returns all unique items in an inventory
+     * @return a set containing the unique items in our invevntory.
+     */
+    public Set<Item> getUniqueItems(){
+        return inventory.keySet();
+    }
 
 
 
