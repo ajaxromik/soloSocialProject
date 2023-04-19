@@ -11,7 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+
+//TODO: Fix when nothing in username or password it dose not create a new user! 
 
 /**
  * The CreateUser_Frame will creates a login page with fields for the user's 
@@ -105,11 +110,35 @@ public class CreateUser_Frame extends Application {
             }
             userMap.put(userNameTxt, pwTxt);
             statusLbl.setText("User created successfully!");
+
+            writeUserMapToFile();
         });
 
         // Create the scene and set it on the stage
         Scene scene = new Scene(grid, 400, 275);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void writeUserMapToFile() {
+        StringBuilder sb = new StringBuilder();
+
+        for (String username : userMap.keySet()) {
+            sb.append(username).append(",");
+        }
+
+        // Remove the last comma
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+
+        // Write to file
+        try {
+            FileWriter writer = new FileWriter("usernames.txt");
+            writer.write(sb.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
