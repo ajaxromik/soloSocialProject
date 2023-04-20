@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ProviderFrame",
+            "request": "launch",
+            "mainClass": "ProviderFrame",
+            "projectName": "SocialProject_c5bfa63e"
+        },
+        {
+            "type": "java",
+            "name": "Login_Frame",
+            "request": "launch",
+            "mainClass": "Login_Frame",
+            "projectName": "SocialProject_c5bfa63e"
+        },
+        {
+            "type": "java",
+            "name": "CreateUser_Frame",
+            "request": "launch",
+            "mainClass": "CreateUser_Frame",
+            "projectName": "SocialProject_c5bfa63e"
+        },
+        {
+            "type": "java",
+            "name": "GUIdriver",
+            "request": "launch",
+            "mainClass": "GUIdriver",
+            "projectName": "SocialProject_c5bfa63e"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "vmArgs": "--module-path \"C:/JavaFX/javafx-sdk-19.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web",
