@@ -1,19 +1,19 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The ProviderFrame will provide the basic functionality for the GUI of 
@@ -24,64 +24,73 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class ProviderFrame extends Application
 {
-    private Scene providerScene;
+    //TODO: NEEDS TO BE LOGGED IN PROVIDER
+    private static Provider provider = new FoodPantry("TEST", "TEST", 4321421342314.3214, 1234432.23423, "jeffs donuts", "A GREAT DONUT SHOP");
     public static void main(String[] args){
         launch(args);
     }
 
     @Override
     public void start(Stage mainStage){ 
-        BorderPane mainPane = new BorderPane(); 
+
+        BorderPane mainPane = new BorderPane();
+
         setupControls(mainPane);
-        Scene scene = new Scene(mainPane);
-        setStage(mainStage, scene);
-        
-    }
 
-    private void setupControls(BorderPane mainPain) {
-
-        TableView<ProductType> viewProduct = new TableView<ProductType>();
-        ArrayList<ProductType> products = new ArrayList<ProductType>();
-        
-
-        TableColumn<ProductType, String> colTitle = 
-				new TableColumn<ProductType, String>("ProductType Title");
-		colTitle.setMinWidth(140);
-		colTitle.setCellValueFactory(
-				new PropertyValueFactory<ProductType, String>("Title")); 
-				
-		TableColumn<ProductType, String> colArtist = 
-				new TableColumn<ProductType, String>("Artist");
-		colArtist.setMinWidth(100);
-		colArtist.setCellValueFactory(
-				new PropertyValueFactory<ProductType, String>("Artist")); 
-
-		TableColumn<ProductType, Integer> colReleaseYear =
-				new TableColumn<ProductType, Integer>("Released");
-		colReleaseYear.setMinWidth(60);
-		colReleaseYear.setCellValueFactory(
-				new PropertyValueFactory<ProductType, Integer>("ReleaseYear")); 
-		
-		TableColumn<ProductType, String> colMovie = 
-				new TableColumn<ProductType, String>("Featured Movie");
-		colMovie.setMinWidth(120);
-		colMovie.setCellValueFactory(
-				new PropertyValueFactory<ProductType, String>("FeaturedMovieTitle")); 
-		
-		viewProduct.getColumns().addAll(Arrays.asList(colTitle, colArtist, colReleaseYear, colMovie));
-		// using Arrays.asList avoids type safety issue
-		products.forEach(product -> viewProduct.getItems().add(product));
-	
-        mainPain.setBottom(viewProduct);
+        setStage(mainStage);
 
     }
-    private void setStage(Stage stage, Scene scene) {
+
+    private void setupControls(BorderPane mainPane){
+        VBox topBox = new VBox();
+        //sets up name field
+        HBox nameBox = new HBox();
+        TextField nameField = new TextField(provider.getName());
+        Button nameSubmit = new Button("change name");
+        nameSubmit.setOnAction(e -> provider.setName(nameField.getText()));
+        nameBox.getChildren().addAll(nameField, nameSubmit);
+
+        //Sets up details field
+        HBox detailsBox = new HBox();
+        TextArea detailsArea = new TextArea(provider.getDetails());
+        detailsArea.setPrefColumnCount(15);
+        detailsArea.setPrefHeight(80);
+        detailsArea.setPrefWidth(250);
+        Button detailsSubmit = new Button("change name");
+        detailsSubmit.setOnAction(e -> provider.setDetails(detailsArea.getText()));
+        detailsBox.getChildren().addAll(detailsArea, detailsSubmit);
+
+        topBox.getChildren().addAll(nameBox, detailsBox);
+        
+        VBox inventoryBox = new VBox();
+        setUpInventoryControls(inventoryBox);
+        
+        
+        mainPane.setTop(topBox);
+
+
+    }
+
+    private void setUpInventoryControls(VBox inventoryBox){
+        HashMap<Item, Integer> inventory = provider.getInventory();
+        for(Map.Entry<Item,Integer> item : inventory.entrySet()){
+            HBox nameBox = new HBox();
+            Label itemName = new Label(item.getKey().getItemName());
+            TextField quantityField = new TextField("" + item.getValue());
+            Button quantitySubmit = new Button("change quantity");
+            quantitySubmit.setOnAction(e -> provider.setItemQuantity();
+            nameBox.getChildren().addAll(nameField, nameSubmit);
+        }
+
+    }
+
+    private void setStage(Stage stage) {
         stage.setTitle("Provider Information");
-        stage.setScene(providerScene);
+
+
         stage.show();
     }
 
 
 
 }
-
