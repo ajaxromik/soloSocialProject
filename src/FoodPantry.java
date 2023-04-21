@@ -7,14 +7,15 @@ import javax.print.attribute.HashPrintJobAttributeSet; //TODO why is this here?
 
 /**
  * An account for a food pantry.
- * @author Alexa Gonzalez, Julius A. Leone
+ * @author Julius A. Leone
  * @version 4.6.2023
  */
-public class FoodPantry extends User{
+public class FoodPantry extends User implements Provider{
     private static final Logger logger = Logger.getLogger("FoodPantry");
 
     private HashMap<Item, Integer> inventory = new HashMap<Item, Integer>();
     private String name;
+    private String details;
 
     /**
      * creates a food pantry
@@ -25,10 +26,37 @@ public class FoodPantry extends User{
      * @param name the name of the food pantry.
      * @author Julius A. Leone
      */
-    public FoodPantry(String username, String password, double longitude, double latitude, String name){
+    public FoodPantry(String username, String password, double longitude, double latitude, String name, String details){
         super(username, password, longitude, latitude);
         this.name = name;
+        this.details = details;
     }
+
+
+    public HashMap<Item,Integer> getInventory() {
+        return this.inventory;
+    }
+
+    public void setInventory(HashMap<Item,Integer> inventory) {
+        this.inventory = inventory;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDetails(){
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+    
 
 
     /**
@@ -107,14 +135,6 @@ public class FoodPantry extends User{
         }
     }
 
-    /**
-     * gets the details of the food pantry.
-     * @return the details of the food pantry.
-     * @author Julius A. Leone
-     */
-    public String getDetails(){
-        return "";
-    }
 
     /**
      * Returns the FoodPantry ButtonPermissions
@@ -129,13 +149,7 @@ public class FoodPantry extends User{
         return perms;
     }
 
-    /**
-     * returns all unique items in an inventory
-     * @return a set containing the unique items in our invevntory.
-     */
-    public Set<Item> getUniqueItems(){
-        return inventory.keySet();
-    }
+    
 
 
 
