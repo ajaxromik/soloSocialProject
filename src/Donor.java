@@ -23,6 +23,10 @@ public class Donor extends User{
     public void addDonation(LocalDate date, ItemType itemType, long donationAmount, int quantityOfItems){
         donations.add(new Donation(date, itemType, donationAmount, quantityOfItems));
     }
+
+    public void deleteDonation(Donation donation){
+        donations.remove(donation);
+    }
     
     /**
      * Returns the FoodPantry ButtonPermissions
