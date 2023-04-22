@@ -3,7 +3,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.print.attribute.HashPrintJobAttributeSet; //TODO why is this here?
 
 /**
  * An account for a food pantry.
@@ -11,13 +10,12 @@ import javax.print.attribute.HashPrintJobAttributeSet; //TODO why is this here?
  * @version 4.6.2023
  */
 public class FoodPantry extends User implements Provider{
+    private static final long serialVersionUID = -43412345566321L;
     private static final Logger logger = Logger.getLogger("FoodPantry");
 
     private HashMap<Item, Integer> inventory = new HashMap<Item, Integer>();
     private String name;
     private String details;
-    private static double longitude;
-    private static double latitude;
 
 
     /**
@@ -33,8 +31,6 @@ public class FoodPantry extends User implements Provider{
         super(username, password, longitude, latitude);
         this.name = name;
         this.details = details;
-        this.longitude = longitude;
-        this.latitude = latitude;
     }
 
 
@@ -62,25 +58,7 @@ public class FoodPantry extends User implements Provider{
         this.details = details;
     }
 
-    /**
-     * Gets the latitude coordinates
-     * 
-     * @author  Alexa Gonzalez
-     * @return  The latitude coordinates
-     */
-    public static double getLatitude(){
-        return latitude;
-    }
     
-    /**
-     * Gets the longitude coordinates
-     * 
-     * @author  Alexa Gonzalez
-     * @return  The longitude coordinates
-     */
-    public static double getLongitude(){
-        return longitude;
-    }
     
 
     /**

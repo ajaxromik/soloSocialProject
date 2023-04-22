@@ -9,6 +9,7 @@ import java.util.Set;
  * @version 4.19.2023
  */
 public class Donor extends User{
+    private static final long serialVersionUID = -12343125445334L;
     private ArrayList<Donation> donations = new ArrayList<Donation>();
 
     public Donor(String username, String password, double longitude, double latitude){

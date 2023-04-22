@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -5,7 +6,7 @@ import java.util.Set;
  * @author Julius A. Leone, William Carr
  * @version 4.6.2023
  */
-abstract public class User{
+abstract public class User implements Serializable{
 
     private String username;
     private String password;
