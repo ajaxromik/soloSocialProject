@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.file.ProviderNotFoundException;
 import java.util.HashMap;
+import java.util.ArrayList;
 /**
  * serializes and deserializes users
  * @author Julius A. Leone
@@ -8,7 +9,7 @@ import java.util.HashMap;
  */
 abstract public class UserBase {
     public static HashMap<String, User> users= new HashMap<String, User>();
-    public static HashMap<String, Provider> providers= new HashMap<String, Provider>();
+    public static ArrayList<Provider> providers= new ArrayList<Provider>();
     public static HashMap<String, Donor> donors = new HashMap<String, Donor>();
     public static HashMap<String, Recipient> recipients = new HashMap<String, Recipient>();
     public static HashMap<String, FoodPantry> foodPantrys = new HashMap<String, FoodPantry>();
@@ -45,7 +46,7 @@ abstract public class UserBase {
         users.putAll(donors);
         users.putAll(recipients);
         users.putAll(foodPantrys);
-        providers.putAll(foodPantrys);
+        providers.addAll(foodPantrys.values());
 
     }
 
