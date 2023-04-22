@@ -1,6 +1,11 @@
 import java.io.*;
 import java.nio.file.ProviderNotFoundException;
 import java.util.HashMap;
+/**
+ * serializes and deserializes users
+ * @author Julius A. Leone
+ * @version 4.22.2023
+ */
 abstract public class UserBase {
     public static HashMap<String, User> users= new HashMap<String, User>();
     public static HashMap<String, Provider> providers= new HashMap<String, Provider>();
@@ -36,7 +41,11 @@ abstract public class UserBase {
         catch(Exception ex){
             ex.printStackTrace();
         }
-
+        
+        users.putAll(donors);
+        users.putAll(recipients);
+        users.putAll(foodPantrys);
+        providers.putAll(foodPantrys);
 
     }
 
