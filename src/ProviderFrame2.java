@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
@@ -22,7 +23,7 @@ public class ProviderFrame2 extends Application {
     //private instance variables allow for easier access to important parts of the Scene
     private Scene providerScene;
     private VBox summaryContainer;
-    private VBox listedHours;
+    private VBox mapContent;
     private Button signOutButton;
 
     private HBox permittedButtons;
@@ -34,14 +35,14 @@ public class ProviderFrame2 extends Application {
     private final int SUMMARY_WIDTH = 600;
     private final String BULLETPOINT = "\u2022";
 
-    private static Provider provider = new FoodPantry("TEST", "1234", 4321421342314.3214, 1234432.23423, "jeffs donuts", "A GREAT DONUT SHOP");
+    private static Provider provider = new FoodPantry("TEST", "1234", 39.7100, -75.1192, "jeffs donuts", "A GREAT DONUT SHOP");
 
 
     
     // ----- testing functions -----
    
     /**
-     * Starts the program!
+     * Starts the program
      * @author Alexa Gonzalez
      */
     public static void main(String[] args) {
@@ -55,6 +56,7 @@ public class ProviderFrame2 extends Application {
     @Override
     public void start(Stage mainStage) {
         buildProviderPage();
+        addOpenStreetMap();
         // addPermittedButtons(null);
         setStage(mainStage);
     }
@@ -95,7 +97,7 @@ public class ProviderFrame2 extends Application {
     }
 
     public VBox getListedHours() {
-        return listedHours;
+        return mapContent;
     }
 
     public Button getSearchButton() {
@@ -176,16 +178,16 @@ public class ProviderFrame2 extends Application {
         summaryContainer.setAlignment(Pos.TOP_LEFT);
 
         //creates the donations feed section(bottom right)
-        Label hours = new Label("Hours");
-        hours.setFont(new Font(17.5));
+        Label map = new Label("Map");
+        map.setFont(new Font(17.5));
 
-        listedHours = new VBox();
-        listedHours.setMinSize(200, 200);
+        mapContent = new VBox();
+        mapContent.setMinSize(200, 200);
 
-        BorderPane listedHoursContainer = new BorderPane();
-        listedHoursContainer.setTop(hours);
-        BorderPane.setAlignment(hours, Pos.TOP_CENTER);
-        listedHoursContainer.setCenter(listedHours);
+        BorderPane mapContentContainer = new BorderPane();
+        mapContentContainer.setTop(map);
+        BorderPane.setAlignment(map, Pos.TOP_CENTER);
+        mapContentContainer.setCenter(mapContent);
 
         //creates the main pane with its settings
         GridPane mainPane = new GridPane();
@@ -199,9 +201,29 @@ public class ProviderFrame2 extends Application {
         mainPane.add(welcome,0,0);
         mainPane.add(loginContainer, 1, 0);
         mainPane.add(summaryContainer, 0, 1);
-        mainPane.add(listedHoursContainer, 1, 1);
+        mainPane.add(mapContentContainer, 1, 1);
 
         providerScene = new Scene(mainPane);
     }
+
+    /**
+     * Display the map of the FoodPantry with the coordinates of the given FoodPantry
+     */
+    private void addOpenStreetMap() {
+        WebView webView = new WebView();
+
+        //The actual map program: String url = "https://www.openstreetmap.org/#map=16/" + FoodPantry.getLatitude() + "/" + FoodPantry.getLongitude();
+        
+        //Embeded Map
+        String url = "https://www.openstreetmap.org/export/embed.html?bbox=" + FoodPantry.getLongitude() + "," + FoodPantry.getLatitude() + "," + FoodPantry.getLongitude() + "," + FoodPantry.getLatitude() + "&layer=mapnik";
+
+        //Testing Purposes: System.out.println(url);
+        webView.getEngine().load(url); 
+
+        webView.setPrefWidth(400);
+        webView.setPrefHeight(300);
+        mapContent.getChildren().add(webView);
+    }
+    
 
 }

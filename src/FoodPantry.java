@@ -16,6 +16,9 @@ public class FoodPantry extends User implements Provider{
     private HashMap<Item, Integer> inventory = new HashMap<Item, Integer>();
     private String name;
     private String details;
+    private static double longitude;
+    private static double latitude;
+
 
     /**
      * creates a food pantry
@@ -26,10 +29,12 @@ public class FoodPantry extends User implements Provider{
      * @param name the name of the food pantry.
      * @author Julius A. Leone
      */
-    public FoodPantry(String username, String password, double longitude, double latitude, String name, String details){
+    public FoodPantry(String username, String password, double latitude , double longitude, String name, String details){
         super(username, password, longitude, latitude);
         this.name = name;
         this.details = details;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
 
@@ -56,8 +61,27 @@ public class FoodPantry extends User implements Provider{
     public void setDetails(String details) {
         this.details = details;
     }
-    
 
+    /**
+     * Gets the latitude coordinates
+     * 
+     * @author  Alexa Gonzalez
+     * @return  The latitude coordinates
+     */
+    public static double getLatitude(){
+        return latitude;
+    }
+    
+    /**
+     * Gets the longitude coordinates
+     * 
+     * @author  Alexa Gonzalez
+     * @return  The longitude coordinates
+     */
+    public static double getLongitude(){
+        return longitude;
+    }
+    
 
     /**
      * checks if an item is in the inventory and they have at least one of it based off the name.
