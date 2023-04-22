@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 public class ProviderFrame extends Application
 {
+    private Scene providerScene;
 
     private static Item testItem = new Item("Apple", "Green");
     //TODO: NEEDS TO BE LOGGED IN PROVIDER
@@ -35,41 +37,48 @@ public class ProviderFrame extends Application
 
     @Override
     public void start(Stage mainStage){ 
-
-        BorderPane mainPane = new BorderPane();
-
-        setupControls(mainPane);
-
+        //BorderPane mainPane = new BorderPane();
         setStage(mainStage);
+
+        setupControls(mainStage);
+
+
 
     }
 
-    private void setupControls(BorderPane mainPane){
-        VBox topBox = new VBox();
-        //sets up name field
-        HBox nameBox = new HBox();
-        TextField nameField = new TextField(provider.getName());
-        Button nameSubmit = new Button("change name");
-        nameSubmit.setOnAction(e -> provider.setName(nameField.getText()));
-        nameBox.getChildren().addAll(nameField, nameSubmit);
+    private void setupControls(Stage mainStage){
 
-        //Sets up details field
-        HBox detailsBox = new HBox();
-        TextArea detailsArea = new TextArea(provider.getDetails());
-        detailsArea.setPrefColumnCount(15);
-        detailsArea.setPrefHeight(80);
-        detailsArea.setPrefWidth(250);
-        Button detailsSubmit = new Button("change name");
-        detailsSubmit.setOnAction(e -> provider.setDetails(detailsArea.getText()));
-        detailsBox.getChildren().addAll(detailsArea, detailsSubmit);
+        BorderPane mainPane = new BorderPane();
 
-        topBox.getChildren().addAll(nameBox, detailsBox);
+        Text welcomeHeader = new Text(provider.getName());
+        welcomeHeader.setFont(new Font(20));
+        mainPane.setTop(welcomeHeader);
+
+        // VBox topBox = new VBox();
+        // //sets up name field
+        // HBox nameBox = new HBox();
+        // TextField nameField = new TextField(provider.getName());
+        // Button nameSubmit = new Button("change name");
+        // nameSubmit.setOnAction(e -> provider.setName(nameField.getText()));
+        // nameBox.getChildren().addAll(nameField, nameSubmit);
+
+        // //Sets up details field
+        // HBox detailsBox = new HBox();
+        // TextArea detailsArea = new TextArea(provider.getDetails());
+        // detailsArea.setPrefColumnCount(15);
+        // detailsArea.setPrefHeight(80);
+        // detailsArea.setPrefWidth(250);
+        // Button detailsSubmit = new Button("change details");
+        // detailsSubmit.setOnAction(e -> provider.setDetails(detailsArea.getText()));
+        // detailsBox.getChildren().addAll(detailsArea, detailsSubmit);
+
+        // topBox.getChildren().addAll(nameBox, detailsBox);
         
-        VBox inventoryBox = new VBox();
-        setUpInventoryControls(inventoryBox);
+        // VBox inventoryBox = new VBox();
+        // setUpInventoryControls(inventoryBox);
         
         
-        mainPane.setTop(topBox);
+        //mainStage.setTop(topBox);
 
 
     }
@@ -82,15 +91,14 @@ public class ProviderFrame extends Application
             TextField quantityField = new TextField("" + item.getValue());
             Button quantitySubmit = new Button("change quantity");
             quantitySubmit.setOnAction(e -> provider.setItemQuantity(testItem, 5));
-            nameBox.getChildren().addAll(); // org. params: nameField, nameSubmit
+            nameBox.getChildren().addAll(nameBox, itemName, quantityField); // org. params: nameField, nameSubmit
         }
 
     }
 
     private void setStage(Stage stage) {
         stage.setTitle("Provider Information");
-
-
+        stage.setScene(providerScene);
         stage.show();
     }
 
