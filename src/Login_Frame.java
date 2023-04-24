@@ -8,8 +8,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Scanner;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -38,7 +42,6 @@ public class Login_Frame extends Application{
      */
     private static Button backButton = new Button("Back");
     private static Button loginButton;
-    private static Button registerButton = new Button("Create Account");
     private static TextField userField; // avoids passing parameters to the loginPress method
     private static PasswordField passField; // ditto of comment above; should never have more than one Login_Frame at a time
     private static User loggedInUser;
@@ -93,10 +96,6 @@ public class Login_Frame extends Application{
         return loginButton;
     }
 
-    public static Button getRegisterButton(){
-        return registerButton;
-    }
-
     /**
      * Allows the driver to access the login page. 
      * Creates a new login page every time, so listeners should be added to the buttons after this method is called
@@ -134,11 +133,10 @@ public class Login_Frame extends Application{
         reset.getChildren().addAll(new Label("Having trouble: "), new Button("Reset")); 
 
         //Register/ new user
-
         HBox register = new HBox();
         register.setAlignment(Pos.BOTTOM_LEFT);
         register.setSpacing(80);
-        register.getChildren().addAll(new Label("New user: "), registerButton);
+        register.getChildren().addAll(new Label("New user: "), new Button("Create Account"));
 
 
         //login and back button
@@ -180,17 +178,23 @@ public class Login_Frame extends Application{
      * @param users The list of users from the database
      */
     private static void loginPress(List<User> users) {
-        Optional<User> user = users.parallelStream()
-                .filter(u -> u.checkLoginInfo(userField.getText(), passField.getText()))
-                .findFirst();
-    
-        if (user.isPresent()) {
-            loggedInUser = user.get();
+        String username = userField.getText();
+        String password = passField.getText();
+        boolean found = false;
+        
+        try (Scanner scanner = new Scanner(new File(username + "," + password + ".txt"))) {
+            found = true;
+        } catch (FileNotFoundException e) {
+            found = false;
+        }
+        
+        if (found) {
+            loggedInUser = new User(username, password);
             backButton.fire(); // uses the backButton's onEvent
         } else {
-            Alert alert = new Alert(AlertType.ERROR, "Please try again, no user was found", ButtonType.OK);
-            alert.showAndWait();
+            // show error message
         }
     }
+    
 
 }
