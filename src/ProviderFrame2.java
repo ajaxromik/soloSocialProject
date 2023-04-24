@@ -1,15 +1,23 @@
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.scene.chart.*;
+import javafx.scene.layout.VBox;
+
 
 /**
  * A class to set up the Home page of our application
@@ -32,7 +40,7 @@ public class ProviderFrame2 extends Application {
     private Button donateButton = new Button("Donate");
     private Button editButton = new Button("Edit Location Info");
 
-    private final int SUMMARY_WIDTH = 600;
+    private final int DETAILS_WIDTH = 600;
     private final String BULLETPOINT = "\u2022";
 
     private static Provider provider = new FoodPantry("TEST", "1234", 39.7100, -75.1192, "jeffs donuts", "A GREAT DONUT SHOP");
@@ -57,6 +65,7 @@ public class ProviderFrame2 extends Application {
     public void start(Stage mainStage) {
         buildProviderPage();
         addOpenStreetMap();
+        // addInventoryChart();
         // addPermittedButtons(null);
         setStage(mainStage);
     }
@@ -112,34 +121,6 @@ public class ProviderFrame2 extends Application {
         return editButton;
     }
 
-    // /**
-    //  * Adds the permitted buttons to the Home screen
-    //  * 
-    //  * @author Alexa Gonzalez
-    //  * @param perms The list of ButtonPermissions to use. May not contain any duplicates. Cannot be null.
-    //  */
-    // public void updatePermittedButtons(Set<ButtonPermission> perms) {
-    //     //if permissions are different, make the buttons correct
-    //     if(!this.perms.equals(perms)){
-    //         this.perms = perms;
-    //         List<Node> children = permittedButtons.getChildren();
-    //         children.clear();
-    //         //add the search button if they are logged in
-    //         if(!perms.isEmpty())
-    //             children.add(searchButton); // everyone gets to search
-    //         for(ButtonPermission perm : perms){
-    //             switch(perm){ //have to have the perms if you want the add or edit buttons
-    //                 case EDIT:
-    //                     children.add(editButton);
-    //                     break;
-    //                 case DONATE:
-    //                     children.add(donateButton);
-    //                     break;
-    //             }
-    //         }
-    //     }
-    // }
-
     /**
      * Creates a home page for the object. 
      * This method should not be called more than once per object, or it will reset every field to their starting values.
@@ -167,19 +148,25 @@ public class ProviderFrame2 extends Application {
 
         // creates the details of the indiviudal provider
         Text detailsContent = new Text("Details: " + provider.getDetails());
-        detailsContent.setWrappingWidth(SUMMARY_WIDTH);
-
-        //creates the buttons for below the summary
-        permittedButtons = new HBox(20);
+        detailsContent.setWrappingWidth(DETAILS_WIDTH);    
 
         summaryContainer = new VBox(10);
         // summaryContainer.setPadding(new Insets(10));
-        summaryContainer.getChildren().addAll(detailsContent, permittedButtons);
+       
+        VBox tableContainer = new VBox();
+        tableContainer.getChildren().add(new Label("Inventory Chart"));
+
+        summaryContainer.getChildren().addAll(detailsContent, tableContainer);
         summaryContainer.setAlignment(Pos.TOP_LEFT);
 
-        //creates the donations feed section(bottom right)
+
+
+        //creates the map section
         Label map = new Label("Map");
         map.setFont(new Font(17.5));
+
+        Label distanceFrom = new Label("Distance From: " ); //+ User.distanceFrom(User.getlatitude(), User.getlatitude())
+        // distanceFrom
 
         mapContent = new VBox();
         mapContent.setMinSize(200, 200);
@@ -198,12 +185,21 @@ public class ProviderFrame2 extends Application {
         mainPane.setAlignment(Pos.CENTER);
         //mainPane.setGridLinesVisible(true); //TODO take this out when the application as a whole is finished entirely
 
+	
+	
         mainPane.add(welcome,0,0);
         mainPane.add(loginContainer, 1, 0);
         mainPane.add(summaryContainer, 0, 1);
         mainPane.add(mapContentContainer, 1, 1);
 
         providerScene = new Scene(mainPane);
+    }
+
+    //TODO this method will eventually make it into the item class
+    private void loadItems(ArrayList<Item> items) {
+        Item item1 = new Item("Apple", "Smith");
+
+        items.addAll(Arrays.asList(item1));
     }
 
     /**
@@ -215,15 +211,53 @@ public class ProviderFrame2 extends Application {
         //The actual map program: String url = "https://www.openstreetmap.org/#map=16/" + FoodPantry.getLatitude() + "/" + FoodPantry.getLongitude();
         
         //Embeded Map
-        String url = "https://www.openstreetmap.org/export/embed.html?bbox=" + FoodPantry.getLongitude() + "," + FoodPantry.getLatitude() + "," + FoodPantry.getLongitude() + "," + FoodPantry.getLatitude() + "&layer=mapnik";
+        //String url = "https://www.openstreetmap.org/export/embed.html?bbox=" + User.getLongitude() + "," + FoodPantry.getLatitude() + "," + FoodPantry.getLongitude() + "," + FoodPantry.getLatitude() + "&layer=mapnik";
 
         //Testing Purposes: System.out.println(url);
-        webView.getEngine().load(url); 
+        
+        
+        
+        
+        // webView.getEngine().load(url); 
 
+       
+        
         webView.setPrefWidth(400);
         webView.setPrefHeight(300);
         mapContent.getChildren().add(webView);
     }
-    
 
+
+    private void addInventoryChart(){
+        TableView<Item> inventoryChart= new TableView<Item>();
+        ArrayList<Item> items = new ArrayList<Item>();
+        loadItems(items);
+
+        // Setup the table columns
+		TableColumn<Item, String> ItemName = 
+				new TableColumn<Item, String>("Item Name");
+		ItemName.setMinWidth(140);
+		ItemName.setCellValueFactory(
+				new PropertyValueFactory<Item, String>("Name")); 
+				
+		TableColumn<Item, String> ItemQuant = 
+				new TableColumn<Item, String>("Item Quantity");
+		ItemQuant.setMinWidth(100);
+		ItemQuant.setCellValueFactory(
+				new PropertyValueFactory<Item, String>("Quantity")); 
+
+		TableColumn<Item, Integer> itemType =
+				new TableColumn<Item, Integer>("Item Type");
+		itemType.setMinWidth(60);
+		itemType.setCellValueFactory(
+				new PropertyValueFactory<Item, Integer>("Type")); 
+		
+		
+		inventoryChart.getColumns().addAll(Arrays.asList(ItemName, ItemQuant, itemType));
+		// using Arrays.asList avoids type safety issue
+		items.forEach(item -> inventoryChart.getItems().add(item));
+
+        summaryContainer.getChildren().add(inventoryChart);
+
+    }
 }

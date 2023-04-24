@@ -34,6 +34,7 @@ public class GUIdriver extends Application{
         
         // listener for login 
         home.getLoginButton().setOnAction(e -> Login_Frame.buildLoginPage(mainStage, users));
+        
         Login_Frame.getBackButton().setOnAction(e -> {
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
                 home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions());
@@ -60,8 +61,8 @@ public class GUIdriver extends Application{
      */
     private ArrayList<User> getUsers() {
         return new ArrayList<User>(Arrays.asList(
-            new FoodPantry("admin", "minad", 0, 0, "Testing FoodPantry"), 
-            new FoodPantry("regularUser", "imAUser", 0, 0, "Testing FoodPantry")
+            new FoodPantry("admin", "minad", 0.0, 0.0, "Testing FoodPantry", "test"), 
+            new FoodPantry("regularUser", "imAUser", 0.0, 0.0, "Testing FoodPantry", "test")
         ));
     }
 
