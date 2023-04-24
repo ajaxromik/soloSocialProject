@@ -100,6 +100,7 @@ public class CreateUser_Frame extends Application {
             }
 
             if (userMap.containsKey(userNameTxt)) {
+                statusLbl.setText("User already exists!");
                 throw new UserAlreadyExistsException("User already exists!");
             }
             
@@ -141,10 +142,7 @@ public class CreateUser_Frame extends Application {
         }
     }
 
-    /**
-     * Constructs a new UserAlreadyExisitsException with the specifed detail message.
-     * @param message   the detail which is saved for later retrieval by the getMessage() method/
-     */
+
     public class UserAlreadyExistsException extends RuntimeException {
         public UserAlreadyExistsException(String message) {
             super(message);
