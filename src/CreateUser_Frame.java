@@ -100,8 +100,7 @@ public class CreateUser_Frame extends Application {
             }
 
             if (userMap.containsKey(userNameTxt)) {
-                statusLbl.setText("User already exists!");
-                return;
+                throw new UserAlreadyExistsException("User already exists!");
             }
             
             if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
@@ -138,7 +137,17 @@ public class CreateUser_Frame extends Application {
             writer.write(sb.toString());
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Failed to write usernames to file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Constructs a new UserAlreadyExisitsException with the specifed detail message.
+     * @param message   the detail which is saved for later retrieval by the getMessage() method/
+     */
+    public class UserAlreadyExistsException extends RuntimeException {
+        public UserAlreadyExistsException(String message) {
+            super(message);
         }
     }
 }
