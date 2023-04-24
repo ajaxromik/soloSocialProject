@@ -29,7 +29,7 @@ import java.util.HashMap;
  */
 public class CreateUser_Frame extends Application {
 
-    private final HashMap<String, String> userMap = new HashMap<>();
+    private final static HashMap<String, String> userMap = new HashMap<>();
 
     // ----- testing methods -----
     public static void main(String[] args) {
@@ -53,7 +53,7 @@ public class CreateUser_Frame extends Application {
      * @param primaryStage the primary stage of the JavaFX application
      * @author Mary C. Moor
      */
-    private void buildLoginPage(Stage primaryStage) {
+    private static void buildLoginPage(Stage primaryStage) {
         // Create the login form
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -101,7 +101,7 @@ public class CreateUser_Frame extends Application {
 
             if (userMap.containsKey(userNameTxt)) {
                 statusLbl.setText("User already exists!");
-                throw new UserAlreadyExistsException("User already exists!");
+             //   throw new UserAlreadyExistsException("User already exists!");
             }
             
             if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
@@ -120,7 +120,7 @@ public class CreateUser_Frame extends Application {
         primaryStage.show();
     }
 
-    private void writeUserMapToFile() {
+    private static void writeUserMapToFile() {
         StringBuilder sb = new StringBuilder();
 
         for (String username : userMap.keySet()) {

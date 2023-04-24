@@ -38,6 +38,7 @@ public class Login_Frame extends Application{
      */
     private static Button backButton = new Button("Back");
     private static Button loginButton;
+    private static Button registerButton = new Button("Create Account");
     private static TextField userField; // avoids passing parameters to the loginPress method
     private static PasswordField passField; // ditto of comment above; should never have more than one Login_Frame at a time
     private static User loggedInUser;
@@ -92,6 +93,10 @@ public class Login_Frame extends Application{
         return loginButton;
     }
 
+    public static Button getRegisterButton(){
+        return registerButton;
+    }
+
     /**
      * Allows the driver to access the login page. 
      * Creates a new login page every time, so listeners should be added to the buttons after this method is called
@@ -129,10 +134,11 @@ public class Login_Frame extends Application{
         reset.getChildren().addAll(new Label("Having trouble: "), new Button("Reset")); 
 
         //Register/ new user
+
         HBox register = new HBox();
         register.setAlignment(Pos.BOTTOM_LEFT);
         register.setSpacing(80);
-        register.getChildren().addAll(new Label("New user: "), new Button("Create Account"));
+        register.getChildren().addAll(new Label("New user: "), registerButton);
 
 
         //login and back button
