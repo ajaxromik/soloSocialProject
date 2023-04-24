@@ -64,7 +64,6 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     private VBox summaryContainer;
     private VBox recentDonationsFeed;
     private Button loginButton;
-    private Button registerButton;
 
     private HBox permittedButtons;
     private Set<ButtonPermission> perms = new HashSet<>(); //by default user has no permissions
@@ -124,9 +123,6 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         return loginButton;
     }
 
-    public Button getRegisterButton(){
-        return registerButton;
-    }
     /**
      * Returns the searchButton
      * 

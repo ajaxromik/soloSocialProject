@@ -29,7 +29,7 @@ import java.util.HashMap;
  */
 public class CreateUser_Frame extends Application {
 
-    private final static HashMap<String, String> userMap = new HashMap<>();
+    private final HashMap<String, String> userMap = new HashMap<>();
 
     // ----- testing methods -----
     public static void main(String[] args) {
@@ -53,7 +53,7 @@ public class CreateUser_Frame extends Application {
      * @param primaryStage the primary stage of the JavaFX application
      * @author Mary C. Moor
      */
-    private static void buildLoginPage(Stage primaryStage) {
+    private void buildLoginPage(Stage primaryStage) {
         // Create the login form
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -101,7 +101,8 @@ public class CreateUser_Frame extends Application {
 
             if (userMap.containsKey(userNameTxt)) {
                 statusLbl.setText("User already exists!");
-             //   throw new UserAlreadyExistsException("User already exists!");
+                throw new UserAlreadyExistsException("User already exists!");
+
             }
             
             if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
@@ -120,27 +121,28 @@ public class CreateUser_Frame extends Application {
         primaryStage.show();
     }
 
-    private static void writeUserMapToFile() {
+    private void writeUserMapToFile() {
         StringBuilder sb = new StringBuilder();
-
+    
         for (String username : userMap.keySet()) {
-            sb.append(username).append(",");
+            sb.append("[").append(username).append(",").append(userMap.get(username)).append("],");
         }
-
+    
         // Remove the last comma
         if (sb.length() > 0) {
             sb.setLength(sb.length() - 1);
         }
-
+    
         // Write to file
         try {
-            FileWriter writer = new FileWriter("usernames.txt");
+            FileWriter writer = new FileWriter("[usernames,passwords].txt");
             writer.write(sb.toString());
             writer.close();
         } catch (IOException e) {
             System.err.println("Failed to write usernames to file: " + e.getMessage());
         }
     }
+    
 
 
     public class UserAlreadyExistsException extends RuntimeException {

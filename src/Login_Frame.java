@@ -8,12 +8,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.List;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Scanner;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
@@ -178,23 +174,17 @@ public class Login_Frame extends Application{
      * @param users The list of users from the database
      */
     private static void loginPress(List<User> users) {
-        String username = userField.getText();
-        String password = passField.getText();
-        boolean found = false;
-        
-        try (Scanner scanner = new Scanner(new File(username + "," + password + ".txt"))) {
-            found = true;
-        } catch (FileNotFoundException e) {
-            found = false;
-        }
-        
-        if (found) {
-            loggedInUser = new User(username, password);
+        Optional<User> user = users.parallelStream()
+                .filter(u -> u.checkLoginInfo(userField.getText(), passField.getText()))
+                .findFirst();
+    
+        if (user.isPresent()) {
+            loggedInUser = user.get();
             backButton.fire(); // uses the backButton's onEvent
         } else {
-            // show error message
+            Alert alert = new Alert(AlertType.ERROR, "Please try again, no user was found", ButtonType.OK);
+            alert.showAndWait();
         }
     }
-    
 
 }

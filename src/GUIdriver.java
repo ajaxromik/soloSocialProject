@@ -35,13 +35,6 @@ public class GUIdriver extends Application{
         // listener for login 
         home.getLoginButton().setOnAction(e -> Login_Frame.buildLoginPage(mainStage, users));
         
-        //code to go to create a new account page
-     
-        home.getRegisterButton().setOnAction(e -> {
-            CreateUser_Frame createUserFrame = new CreateUser_Frame();
-            createUserFrame.buildLoginPage(mainStage);
-        });
-        
         Login_Frame.getBackButton().setOnAction(e -> {
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
                 home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions());
