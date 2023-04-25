@@ -182,7 +182,7 @@ public class Login_Frame extends Application{
             loggedInUser = user.get();
             backButton.fire(); // uses the backButton's onEvent
         } else {
-            Alert alert = new Alert(AlertType.ERROR, "Please try again, no user was found", ButtonType.OK);
+            Alert alert = new Alert(AlertType.ERROR, "Please try again, there is no user with those login credentials", ButtonType.OK);
             alert.showAndWait();
         }
     }

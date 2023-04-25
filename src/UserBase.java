@@ -16,7 +16,7 @@ abstract public class UserBase {
 
     static{
         try{
-            FileInputStream fs = new FileInputStream("donors.ser");
+            FileInputStream fs = new FileInputStream("ser/donors.ser");
             ObjectInputStream is = new ObjectInputStream(fs);
             donors = (HashMap<String, Donor>)is.readObject();
             is.close();
@@ -25,7 +25,7 @@ abstract public class UserBase {
             ex.printStackTrace();
         }
         try{
-            FileInputStream fs = new FileInputStream("recipients.ser");
+            FileInputStream fs = new FileInputStream("ser/recipients.ser");
             ObjectInputStream is = new ObjectInputStream(fs);
             recipients = (HashMap<String, Recipient>)is.readObject();
             is.close();
@@ -34,7 +34,7 @@ abstract public class UserBase {
             ex.printStackTrace();
         }
         try{
-            FileInputStream fs = new FileInputStream("foodPantrys.ser");
+            FileInputStream fs = new FileInputStream("ser/foodPantrys.ser");
             ObjectInputStream is = new ObjectInputStream(fs);
             foodPantrys = (HashMap<String, FoodPantry>)is.readObject();
             is.close();
@@ -53,7 +53,7 @@ abstract public class UserBase {
 
     public static void serializeDonors(){
         try{
-            FileOutputStream fs = new FileOutputStream("donors.ser");
+            FileOutputStream fs = new FileOutputStream("ser/donors.ser");
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(donors);
             os.close();
@@ -65,7 +65,7 @@ abstract public class UserBase {
 
     public static void serializeRecipients(){
         try{
-            FileOutputStream fs = new FileOutputStream("recipients.ser");
+            FileOutputStream fs = new FileOutputStream("ser/recipients.ser");
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(recipients);
             os.close();
@@ -77,7 +77,7 @@ abstract public class UserBase {
 
     public static void serializeFoodPantrys(){
         try{
-            FileOutputStream fs = new FileOutputStream("foodPantrys.ser");
+            FileOutputStream fs = new FileOutputStream("ser/foodPantrys.ser");
             ObjectOutputStream os = new ObjectOutputStream(fs);
             os.writeObject(foodPantrys);
             os.close();
