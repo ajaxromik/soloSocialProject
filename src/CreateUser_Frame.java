@@ -20,7 +20,7 @@ import java.util.HashMap;
 //TODO: Fix when nothing in username or password it dose not create a new user! 
 
 /**
- * The CreateUser_Frame will creates a login page with fields for the user's 
+ * The CreateUser_Frame will creates a create page with fields for the user's 
  * name, password and re-entered password. Upon clicking the "Create" button,
  * the program checks if the passwords match and if the username is not 
  * already taken. If the input is valid, the program stores the user's 
@@ -34,31 +34,34 @@ public class CreateUser_Frame extends Application {
 
     // ----- testing methods -----
     public static void main(String[] args) {
+        System.out.println(UserBase.users);
         launch(args);
     }
 
     /**
-     * Builds the login page and displays it.
+     * Builds the create page and displays it.
      * @param primaryStage the primary stage of the JavaFX application
      * @author Mary C. Moor
      */
     @Override
     public void start(Stage primaryStage) {
-        buildSpecialtiesPage(primaryStage);
+        buildCreatePage(primaryStage);
     }
 
     // ----- end of testing methods -----
 
     private static String userNameTxt;
     private static String pwTxt;
+    private static int longitudeValue;
+    private static int latitudeValue;
 
     /**
-     * Creates the login page.
+     * Creates the Creation page.
      * @param primaryStage the primary stage of the JavaFX application
      * @author Mary C. Moor, William Carr
      */
-    public static void buildLoginPage(Stage primaryStage) {
-        // Create the login form
+    public static void buildCreatePage(Stage primaryStage) {
+        // Create the Create form
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -99,14 +102,16 @@ public class CreateUser_Frame extends Application {
         TextField latitudeField = new TextField();
         grid.add(latitudeField, 1, 5);
 
-        //Only allows numbers into the longitude and latitude
+        //Only allows numbers into the longitude and latitude, and sets the static variables
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.matches("[0-9]")) 
                 longitudeField.setText(newValue.replaceAll("[^0-9]",""));
+            longitudeValue = Integer.parseInt(longitudeField.getText());
         });
         latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.matches("[0-9]")) 
                 latitudeField.setText(newValue.replaceAll("[^0-9]",""));
+            latitudeValue = Integer.parseInt(latitudeField.getText());
         });
 
         Button btn = new Button("Create");
@@ -135,10 +140,9 @@ public class CreateUser_Frame extends Application {
                 statusLbl.setText("Fields can not be blank!");
                 return;
             }
-            // userMap.put(userNameTxt, pwTxt);
+            
             statusLbl.setText("User created successfully!");
-
-            // writeUserMapToFile();
+            buildSpecialtiesPage(primaryStage);
         });
 
         // Create the scene and set it on the stage
@@ -153,7 +157,7 @@ public class CreateUser_Frame extends Application {
      * @author William Carr
      */
     public static void buildSpecialtiesPage(Stage primaryStage) {
-        // Create the login form
+        // Create the create form
         GridPane mainPane = new GridPane();
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setHgap(10);
@@ -171,23 +175,93 @@ public class CreateUser_Frame extends Application {
 		accountTypes.getItems().addAll("Standard User", "Donor", "Food Pantry"); //calling the account type recipient feels weird
 		accountTypes.setValue("Standard User");
         mainPane.add(accountTypes, 1, 1);
+
+        //where to add any special additions
+        GridPane specialtyGrid = new GridPane();
+        specialtyGrid.setHgap(10);
+        specialtyGrid.setVgap(10);
+        mainPane.add(specialtyGrid, 0, 2, 2, 1);
+
+        Button submit = new Button("Create User");
+        mainPane.add(submit,1,3);
         
+        //creates the fields outside of the listener so that we can access them
+        TextField nameField = new TextField();
+        TextField detailsField = new TextField();
+
+        // listeners
+        submit.setOnAction(e -> submitRecipient()); // default because of standard user being default
+
         accountTypes.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue);
-            switch(newValue){
-                case "Standard User":
-                    break;
-                case "Donor":
-                    break;
-                case "Food Pantry":
-                    break;
+            if(newValue.equals("Food Pantry")){
+                specialtyGrid.add(new Label("Organization: "), 0, 0);
+                specialtyGrid.add(new Label("Details for users: "), 0, 1);
+
+                specialtyGrid.add(nameField, 1, 0);
+                specialtyGrid.add(detailsField, 1, 1);
+
+                submit.setOnAction(e -> submitFoodPantry(nameField.getText(), detailsField.getText()));
+            } else {
+                specialtyGrid.getChildren().clear();
+                
+                if(newValue.equals("Donor")){
+                    submit.setOnAction(e -> submitDonor());
+                } else { // standard user/recipient case
+                    submit.setOnAction(e -> submitRecipient());
+                }
             }
+            // update window height
+            primaryStage.sizeToScene();
         });
 
         // Create the scene and set it on the stage
         Scene scene = new Scene(mainPane);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    /**
+     * Creates a Food Pantry and has the UserBase handle it
+     * DO NOT PLAY WITH THIS.
+     * 
+     * @author William Carr
+     * @param name Name of the organization
+     * @param details Details for the users to see
+     */
+    private static void submitFoodPantry(String name, String details) {
+        FoodPantry newFoodPantry = new FoodPantry(userNameTxt, pwTxt, longitudeValue, latitudeValue, name, details);
+        UserBase.foodPantrys.put(newFoodPantry.getUsername(), newFoodPantry);
+        UserBase.serializeFoodPantrys();
+        System.out.println("submitted pantry");
+        System.out.println(UserBase.foodPantrys);
+    }
+
+    /**
+     * Creates a Donor and has the UserBase handle it
+     * DO NOT PLAY WITH THIS.
+     * 
+     * @author William Carr
+     */
+    private static void submitDonor(){
+        Donor newDonor = new Donor(userNameTxt, pwTxt, longitudeValue, latitudeValue);
+        UserBase.donors.put(newDonor.getUsername(), newDonor);
+        UserBase.serializeDonors();
+        System.out.println("submitted donor");
+        System.out.println(UserBase.donors);
+    }
+    
+    /**
+     * Creates a Recipient and has the UserBase handle it
+     * DO NOT PLAY WITH THIS.
+     * 
+     * @author William Carr
+     */
+    private static void submitRecipient(){
+        Recipient newRecipient = new Recipient(userNameTxt, pwTxt, longitudeValue, latitudeValue);
+        UserBase.recipients.put(newRecipient.getUsername(), newRecipient);
+        UserBase.serializeRecipients();
+        System.out.println("submitted recipient");
+        System.out.println(UserBase.recipients);
     }
 
     //already done in userbase

@@ -26,9 +26,9 @@ public class FoodPantry extends User implements Provider{
      * @param latitude the latitude of the food pantry.
      * @param name the name of the food pantry.
      * @author Julius A. Leone
-     * @param string
+     * @param details details of the pantry
      */
-    public FoodPantry(String username, String password, double latitude , double longitude, String name, String string){
+    public FoodPantry(String username, String password, double latitude , double longitude, String name, String details){
         super(username, password, longitude, latitude);
         this.name = name;
         this.details = details;

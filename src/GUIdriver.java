@@ -51,8 +51,8 @@ public class GUIdriver extends Application{
             mainStage.setScene(home.getScene());
         });
 
-        Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildLoginPage(mainStage));
-        
+        Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildCreatePage(mainStage));
+
     }
 
     /**
