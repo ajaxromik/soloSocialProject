@@ -60,6 +60,20 @@ abstract public class User implements Serializable{
     public void setlatitude(double latitude) {
         this.latitude = latitude;
     }
+    
+    /**
+     * User toString method.
+     * 
+     * @author William Carr
+     * @return String showing the data
+     */
+    @Override
+    public String toString() {
+        return "\nusername: "+username+
+               "\npassword: "+password+
+               "\nlongitude: "+longitude+
+               "\nlatitude: "+latitude;
+    }
 
     /** //TODO if you need to put this into a different class, copy the version from ****FoodPantry**** and change accordingly
      * Every user has specific permissions to buttons, which get get from here

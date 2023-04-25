@@ -60,10 +60,7 @@ public class GUIdriver extends Application{
      * @return The list of users on file for our organization
      */
     private ArrayList<User> getUsers() {
-        return new ArrayList<User>(Arrays.asList(
-            new FoodPantry("admin", "minad", 0.0, 0.0, "Testing FoodPantry", "test"), 
-            new FoodPantry("regularUser", "imAUser", 0.0, 0.0, "Testing FoodPantry", "test")
-        ));
+        return new ArrayList<User>(UserBase.users.values());
     }
 
 }

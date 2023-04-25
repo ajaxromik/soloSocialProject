@@ -59,7 +59,19 @@ public class FoodPantry extends User implements Provider{
         this.details = details;
     }
 
-    
+    /**
+     * FoodPantry toString method.
+     * 
+     * @author William Carr
+     * @return String showing the instance vars
+     */
+    @Override
+    public String toString() {
+        return super.toString() +
+               "\ninventory: "+inventory+
+               "\nname: "+name+
+               "\ndetails: "+details;
+    }
     
 
     /**
