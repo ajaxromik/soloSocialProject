@@ -3,6 +3,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -25,11 +26,11 @@ import java.util.HashMap;
  * already taken. If the input is valid, the program stores the user's 
  * credentials in a HashMap and displays a success message. If the input is 
  * invalid, the program displays an appropriate error message.
- * @author Mary C. Moor
+ * @author Mary C. Moor, William Carr
  */
 public class CreateUser_Frame extends Application {
 
-    private final HashMap<String, String> userMap = new HashMap<>();
+    private static final HashMap<String, User> userMap = UserBase.users;
 
     // ----- testing methods -----
     public static void main(String[] args) {
@@ -43,17 +44,20 @@ public class CreateUser_Frame extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        buildLoginPage(primaryStage);
+        buildSpecialtiesPage(primaryStage);
     }
 
     // ----- end of testing methods -----
 
+    private static String userNameTxt;
+    private static String pwTxt;
+
     /**
      * Creates the login page.
      * @param primaryStage the primary stage of the JavaFX application
-     * @author Mary C. Moor
+     * @author Mary C. Moor, William Carr
      */
-    private void buildLoginPage(Stage primaryStage) {
+    public static void buildLoginPage(Stage primaryStage) {
         // Create the login form
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -83,15 +87,37 @@ public class CreateUser_Frame extends Application {
         PasswordField pwBox2 = new PasswordField();
         grid.add(pwBox2, 1, 3);
 
+        Label longitude = new Label("Longitude:");
+        grid.add(longitude, 0, 4);
+
+        TextField longitudeField = new TextField();
+        grid.add(longitudeField, 1, 4);
+
+        Label latitude = new Label("Latitude:");
+        grid.add(latitude, 0, 5);
+
+        TextField latitudeField = new TextField();
+        grid.add(latitudeField, 1, 5);
+
+        //Only allows numbers into the longitude and latitude
+        longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("[0-9]")) 
+                longitudeField.setText(newValue.replaceAll("[^0-9]",""));
+        });
+        latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("[0-9]")) 
+                latitudeField.setText(newValue.replaceAll("[^0-9]",""));
+        });
+
         Button btn = new Button("Create");
-        grid.add(btn, 1, 4);
+        grid.add(btn, 1, 6);
 
         Label statusLbl = new Label();
-        grid.add(statusLbl, 1, 5);
+        grid.add(statusLbl, 1, 7);
 
         btn.setOnAction(event -> {
-            String userNameTxt = userTextField.getText();
-            String pwTxt = pwBox.getText();
+            userNameTxt = userTextField.getText();
+            pwTxt = pwBox.getText();
             String pwTxt2 = pwBox2.getText();
 
             if (!pwTxt.equals(pwTxt2)) {
@@ -109,18 +135,62 @@ public class CreateUser_Frame extends Application {
                 statusLbl.setText("Fields can not be blank!");
                 return;
             }
-            userMap.put(userNameTxt, pwTxt);
+            // userMap.put(userNameTxt, pwTxt);
             statusLbl.setText("User created successfully!");
 
-            writeUserMapToFile();
+            // writeUserMapToFile();
         });
 
         // Create the scene and set it on the stage
-        Scene scene = new Scene(grid, 400, 275);
+        Scene scene = new Scene(grid);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    /**
+     * Creates the page where you add the special details for each type of user.
+     * @param primaryStage the primary stage of the app
+     * @author William Carr
+     */
+    public static void buildSpecialtiesPage(Stage primaryStage) {
+        // Create the login form
+        GridPane mainPane = new GridPane();
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setHgap(10);
+        mainPane.setVgap(10);
+        mainPane.setPadding(new Insets(25, 25, 25, 25));
+
+        Label sceneTitle = new Label("Account Specialties");
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        mainPane.add(sceneTitle, 0, 0, 2, 1);
+
+        Label accTypeLabel = new Label("Type of Account:");
+        mainPane.add(accTypeLabel, 0, 1);
+
+        ChoiceBox<String> accountTypes = new ChoiceBox<String>();
+		accountTypes.getItems().addAll("Standard User", "Donor", "Food Pantry"); //calling the account type recipient feels weird
+		accountTypes.setValue("Standard User");
+        mainPane.add(accountTypes, 1, 1);
+        
+        accountTypes.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println(newValue);
+            switch(newValue){
+                case "Standard User":
+                    break;
+                case "Donor":
+                    break;
+                case "Food Pantry":
+                    break;
+            }
+        });
+
+        // Create the scene and set it on the stage
+        Scene scene = new Scene(mainPane);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    //already done in userbase
     private void writeUserMapToFile() {
         StringBuilder sb = new StringBuilder();
     
@@ -145,7 +215,12 @@ public class CreateUser_Frame extends Application {
     
 
 
-    public class UserAlreadyExistsException extends RuntimeException {
+    /**
+     * A custom exception to show our message, must be static as we have no instance of CreateUserFrame
+     * 
+     * @author Mary Moor, William Carr
+     */
+    public static class UserAlreadyExistsException extends RuntimeException {
         public UserAlreadyExistsException(String message) {
             super(message);
         }

@@ -50,6 +50,9 @@ public class GUIdriver extends Application{
             // set the scene at the end because if we do it before, it'll change the sizing after swapping scenes
             mainStage.setScene(home.getScene());
         });
+
+        Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildLoginPage(mainStage));
+        
     }
 
     /**

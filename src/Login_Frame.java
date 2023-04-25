@@ -37,6 +37,7 @@ public class Login_Frame extends Application{
      * backButton should never be modified besides this and the driver's listener, do it static if you must
      */
     private static Button backButton = new Button("Back");
+    private static Button createAccButton = new Button("Create Account");
     private static Button loginButton;
     private static TextField userField; // avoids passing parameters to the loginPress method
     private static PasswordField passField; // ditto of comment above; should never have more than one Login_Frame at a time
@@ -51,6 +52,16 @@ public class Login_Frame extends Application{
      */
     public static Button getBackButton() {
         return backButton;
+    }
+
+    /**
+     * Returns the createAccButton
+     * 
+     * @author William Carr
+     * @return createAccButton field
+     */
+    public static Button getCreateAccButton() {
+        return createAccButton;
     }
 
     /**
@@ -132,7 +143,7 @@ public class Login_Frame extends Application{
         HBox register = new HBox();
         register.setAlignment(Pos.BOTTOM_LEFT);
         register.setSpacing(80);
-        register.getChildren().addAll(new Label("New user: "), new Button("Create Account"));
+        register.getChildren().addAll(new Label("New user: "), createAccButton);
 
 
         //login and back button
