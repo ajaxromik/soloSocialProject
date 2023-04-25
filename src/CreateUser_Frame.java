@@ -232,8 +232,7 @@ public class CreateUser_Frame extends Application {
         FoodPantry newFoodPantry = new FoodPantry(userNameTxt, pwTxt, longitudeValue, latitudeValue, name, details);
         UserBase.foodPantrys.put(newFoodPantry.getUsername(), newFoodPantry);
         UserBase.serializeFoodPantrys();
-        System.out.println("submitted pantry");
-        System.out.println(UserBase.foodPantrys);
+        Login_Frame.getBackButton().fire();
     }
 
     /**
@@ -246,8 +245,7 @@ public class CreateUser_Frame extends Application {
         Donor newDonor = new Donor(userNameTxt, pwTxt, longitudeValue, latitudeValue);
         UserBase.donors.put(newDonor.getUsername(), newDonor);
         UserBase.serializeDonors();
-        System.out.println("submitted donor");
-        System.out.println(UserBase.donors);
+        Login_Frame.getBackButton().fire();
     }
     
     /**
@@ -260,8 +258,7 @@ public class CreateUser_Frame extends Application {
         Recipient newRecipient = new Recipient(userNameTxt, pwTxt, longitudeValue, latitudeValue);
         UserBase.recipients.put(newRecipient.getUsername(), newRecipient);
         UserBase.serializeRecipients();
-        System.out.println("submitted recipient");
-        System.out.println(UserBase.recipients);
+        Login_Frame.getBackButton().fire();
     }
 
     //already done in userbase
