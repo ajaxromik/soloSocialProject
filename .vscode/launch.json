@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GUIdriver",
+            "request": "launch",
+            "mainClass": "GUIdriver",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
             "name": "ProviderFrame",
             "request": "launch",
             "mainClass": "ProviderFrame",

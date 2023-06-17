@@ -35,9 +35,9 @@ public class GUIdriver extends Application{
         // listener for login 
         home.getLoginButton().setOnAction(e -> Login_Frame.buildLoginPage(mainStage, users));
         
-        Login_Frame.getBackButton().setOnAction(e -> {
+        Login_Frame.getBackButton().setOnAction(e -> { // the code in this button is how the screen returns to the home screen, and is called with a fire() method in Login_Frame
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
-                home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions());
+                home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions()); // no matter what type of user, get the button permissions for them
 
                 //TODO make this its own change login method and logout method
                 home.getLoginButton().setText("Log out of: "+Login_Frame.getLoggedInUser().getUsername());
