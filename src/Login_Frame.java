@@ -133,12 +133,6 @@ public class Login_Frame extends Application{
         passField = new PasswordField();
         password.getChildren().addAll(new Label("Password:"), passField);
 
-        //Forgot username/password          //keep in mind the users have no email
-        HBox reset = new HBox();
-        reset.setAlignment(Pos.BOTTOM_LEFT);
-        reset.setSpacing(100);
-        reset.getChildren().addAll(new Label("Having trouble: "), new Button("Reset")); 
-
         //Register/ new user
         HBox register = new HBox();
         register.setAlignment(Pos.BOTTOM_LEFT);
@@ -157,7 +151,7 @@ public class Login_Frame extends Application{
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setSpacing(10);
         centerBox.setPadding(new Insets(10));
-        centerBox.getChildren().addAll(welcome, username, password, reset, register, login);
+        centerBox.getChildren().addAll(welcome, username, password, register, login);
         
         // Create a container to hold the login box with border
         GridPane gridPane = new GridPane();
