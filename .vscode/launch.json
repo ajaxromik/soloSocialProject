@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ProviderFrame2",
+            "request": "launch",
+            "mainClass": "ProviderFrame2",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
+            "name": "ProviderFrame",
+            "request": "launch",
+            "mainClass": "ProviderFrame",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
+            "name": "TestingDriver",
+            "request": "launch",
+            "mainClass": "TestingDriver",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
             "name": "Login_Frame",
             "request": "launch",
             "mainClass": "Login_Frame",

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * @author Julius A.Leone
  * @version 4.16.2023
  */
-public class Searcher {
+public class Searcher { //TODO let's put in some default filters for the search so that the search screen isnt empty at first
     private BiPredicate<Provider, String> filter;
 
     /**

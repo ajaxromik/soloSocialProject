@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Acts as a driver for tests on the program
  * 
@@ -13,7 +15,14 @@ public class TestingDriver {
 
         // UserBase.serializeFoodPantrys();
         
-        System.out.println(UserBase.users);
+        Searcher defSearcher = new Searcher((provider, string) -> provider.getName().toLowerCase().contains(string.toLowerCase()));
+
+        System.out.println(defSearcher.searchProviders(UserBase.providers, "e"));//TODO this is how we want to do it generally, but could store a second Searcher method of doing it where it doesn't contain the phrase
+        // UserBase.providers.get(0).setName("Fusha");
+        // UserBase.serializeFoodPantrys();
+        // System.out.println(UserBase.providers);
+
+        
     }
 
 }
