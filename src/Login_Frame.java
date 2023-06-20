@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
 
 /**
  * This Class is the login frame of our appliaction. This is where the user will enter in their login and password 

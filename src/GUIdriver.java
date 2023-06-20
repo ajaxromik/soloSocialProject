@@ -29,11 +29,12 @@ public class GUIdriver extends Application{
      */
     @Override
     public void start(Stage mainStage) {
-        ArrayList<User> users = getUsers(); // TODO temporary testing replacement for the users we will use in the end; change when serialization is done
+        ArrayList<User> users = getUsers();
         HomeFrame home = new HomeFrame(mainStage);
         
         // listener for login 
         home.getLoginButton().setOnAction(e -> Login_Frame.buildLoginPage(mainStage, users));
+        home.getSearchButton().setOnAction(e -> System.out.println());// TODO replace this with real connection to search screen
         
         Login_Frame.getBackButton().setOnAction(e -> { // the code in this button is how the screen returns to the home screen, and is called with a fire() method in Login_Frame
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in

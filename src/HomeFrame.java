@@ -41,7 +41,6 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     @Override
     public void start(Stage mainStage) {
         buildHomePage();
-        // addPermittedButtons(null);
         setStage(mainStage);
         getLoginButton().setOnAction(e -> System.out.println("login button pressed"));
     }

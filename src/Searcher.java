@@ -49,7 +49,7 @@ public class Searcher {
 
     /**
      * Returns a default Searcher
-     * @param filter The name of the default Searcher(i.e. "contains")
+     * @param filter The name of the default Searcher(i.e. "contains"). Must use the right name or returns null.
      * @return A default method of searching
      * @author William Carr
      */
