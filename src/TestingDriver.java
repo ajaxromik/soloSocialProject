@@ -24,10 +24,10 @@ public class TestingDriver {
         // System.out.println(defSearcher.searchProviders(UserBase.providers, "e"));
         // UserBase.providers.get(0).setName("Fusha");
         // UserBase.serializeFoodPantrys();
-        // System.out.println(UserBase.providers);
+        System.out.println(UserBase.providers);
 
-        String s = sc.nextLine();
-        System.out.println(Searcher.getDefault("contains").searchProviders(UserBase.providers, s));
+        // String s = sc.nextLine();
+        // System.out.println(Searcher.getDefault("contains").searchProviders(new ArrayList<Provider>(UserBase.providers.values()), s));
         
     }
 

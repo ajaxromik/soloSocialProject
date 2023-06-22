@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -32,7 +31,7 @@ public class SearchFrame extends Application{
      */
     public static void main(String[] args) {
         launch(args);
-        System.out.println(UserBase.providers);
+        // System.out.println(UserBase.providers);
     }
 
     /**
@@ -48,27 +47,30 @@ public class SearchFrame extends Application{
 
     // ----- end of testing methods -----
 
-    private static List<BorderPane> providerPanes;
+    private static Map<String,BorderPane> providerPanes;
     static {
         providerPanes = 
-        UserBase.providers.stream()
-                          .map(
-                            provider -> {
+        UserBase.providers.entrySet()
+                          .stream() // stream of entries, a great way to give you a headache
+                          .collect(Collectors.toMap(
+                            Map.Entry::getKey, // use the key of the current mapping of name to provider
+                            entry -> {
+                                Provider provider = entry.getValue();
                                 BorderPane providerPane = new BorderPane();
                                 providerPane.setPadding(new Insets(15));
                                 providerPane.setMaxSize(940,250);
 
-                                Label header = new Label(String.format("%n (%lo, %la)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
+                                Label header = new Label(String.format("%s (%.8f, %.8f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
                                 Button seeMoreButton = new Button("See More"); // figure out how to make this link to a new provider frame for each provider
-                                Text details = new Text(provider.getDetails()+"\n"+provider.getInventory().keySet());// details and inventory
+                                Text details = new Text(provider.getDetails()+"\n"
+                                +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet()));// details and inventory, if it's not empty
 
                                 providerPane.setLeft(header);
                                 providerPane.setRight(seeMoreButton);
                                 providerPane.setBottom(details);
-                                return providerPane;
+                                return providerPane; //return a custom pane for each one
                             }
-                          )
-                          .collect(Collectors.toList());
+                          ));
     }
 
     //held separately to inject the code to return to the rest of the program
@@ -89,13 +91,14 @@ public class SearchFrame extends Application{
      * 
      * @param mainStage The stage to put the SearchFrame into
      */
-    public static void buildSearchPage(Stage mainStage) { //TODO add a back button
-
-        
+    public static void buildSearchPage(Stage mainStage) {
 
         // search results
         VBox resultsBox = new VBox();
         resultsBox.setMaxWidth(970);
+
+        //TODO this is testing, adding all the providers; make it only search results
+        resultsBox.getChildren().addAll(providerPanes.values());
         
         ScrollPane searchResults = new ScrollPane(resultsBox); //TODO figure out how to display a little blurb for every provider here
         searchResults.setHbarPolicy(ScrollBarPolicy.NEVER);
