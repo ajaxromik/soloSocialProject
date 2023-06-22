@@ -1,6 +1,4 @@
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -169,24 +167,5 @@ public class FoodPantry extends User implements Provider{
             inventory.put(itemToChange, quantity);
         }
     }
-
-
-    /**
-     * Returns the FoodPantry ButtonPermissions
-     * 
-     * @author William Carr
-     * @return The ArrayList of ButtonPermission enums
-     */
-    public Set<ButtonPermission> getButtonPermissions() {
-        HashSet<ButtonPermission> perms = new HashSet<>();
-        perms.add(ButtonPermission.EDIT);
-        // perms.add(ButtonPermission.DONATE); //TODO remove this, testing
-        return perms;
-    }
-
-    
-
-
-
 
 }

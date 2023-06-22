@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -7,6 +8,9 @@ import java.util.Set;
  * @version 4.6.2023
  */
 abstract public class User implements Serializable{
+
+    
+    private static final long serialVersionUID = -43412345566322L;
 
     private String username;
     private String password;
@@ -75,13 +79,17 @@ abstract public class User implements Serializable{
                "\nlatitude: "+latitude;
     }
 
-    /** //TODO if you need to put this into a different class, copy the version from ****FoodPantry**** and change accordingly
+    /**
      * Every user has specific permissions to buttons, which get get from here
      * 
      * @author William Carr
      * @return The set of ButtonPermission enums
      */
-    abstract public Set<ButtonPermission> getButtonPermissions();
+    public Set<ButtonPermission> getButtonPermissions(){
+        HashSet<ButtonPermission> perms = new HashSet<>();
+        perms.add(ButtonPermission.EDIT);
+        return perms;
+    }
 
     /**
      * Checks an entered username and password

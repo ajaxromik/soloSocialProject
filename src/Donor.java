@@ -36,9 +36,8 @@ public class Donor extends User{
      * @return The ArrayList of ButtonPermission enums
      */
     public Set<ButtonPermission> getButtonPermissions() {
-        HashSet<ButtonPermission> perms = new HashSet<>();
-        perms.add(ButtonPermission.EDIT);
-        // perms.add(ButtonPermission.DONATE); //TODO remove this, testing
+        HashSet<ButtonPermission> perms = new HashSet<>(super.getButtonPermissions());
+        perms.add(ButtonPermission.DONATE);
         return perms;
     }
 
