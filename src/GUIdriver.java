@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 /**
  * Acts as the driver for the application as a whole.
+ * Does a lot of setting the listeners that connect frames to each other
  * 
  * @author William Carr
  */
@@ -21,6 +22,8 @@ public class GUIdriver extends Application{
         launch(args);
     }
 
+    private static ArrayList<User> users = new ArrayList<User>(UserBase.users.values());
+
     /**
      * A start method that allows the pages to swap from one screen to another
      * 
@@ -29,12 +32,14 @@ public class GUIdriver extends Application{
      */
     @Override
     public void start(Stage mainStage) {
-        ArrayList<User> users = getUsers(); //this list is not updating when a new user is created
+
         HomeFrame home = new HomeFrame(mainStage);
         
         // listener for login 
         home.getLoginButton().setOnAction(e -> Login_Frame.buildLoginPage(mainStage, users));
-        home.getSearchButton().setOnAction(e -> System.out.println());// TODO replace this with real connection to search screen
+
+        //permission-based home button listeners
+        home.getSearchButton().setOnAction(e -> System.out.println("searching...sasdfasdf"));// TODO replace this with real connection to search screen
         
         Login_Frame.getBackButton().setOnAction(e -> { // the code in this button is how the screen returns to the home screen, and is called with a fire() method in Login_Frame
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
@@ -53,22 +58,17 @@ public class GUIdriver extends Application{
         });
 
         Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildCreatePage(mainStage));
-
-    }
-
-    public void setUsers() { //TODO make this update the users and the buttons that depend on the users
-
+        SearchFrame.getBackButton().setOnAction(e -> mainStage.setScene(home.getScene()));
     }
 
     /**
-     * Temporary testing replacement for the list of users. //TODO fill this eventually
-     * There should never be users with the same username, let alone same user and password.
+     * Updates the users
      * 
      * @author William Carr
      * @return The list of users on file for our organization
      */
-    private ArrayList<User> getUsers() {
-        return new ArrayList<User>(UserBase.users.values());
+    public static void addUser(User user) {
+        users.add(user);
     }
 
 }

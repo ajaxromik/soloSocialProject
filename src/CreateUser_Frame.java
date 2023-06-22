@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -233,6 +232,7 @@ public class CreateUser_Frame extends Application {
         UserBase.foodPantrys.put(newFoodPantry.getUsername(), newFoodPantry);
         UserBase.serializeFoodPantrys();
         UserBase.users.put(newFoodPantry.getUsername(), newFoodPantry); // needed so that the app can use the new user without closing the app and starting it up again
+        GUIdriver.addUser(newFoodPantry);
         Login_Frame.getBackButton().fire();
     }
 
@@ -247,6 +247,7 @@ public class CreateUser_Frame extends Application {
         UserBase.donors.put(newDonor.getUsername(), newDonor);
         UserBase.serializeDonors();
         UserBase.users.put(newDonor.getUsername(), newDonor); // needed so that the app can use the new user without closing the app and starting it up again
+        GUIdriver.addUser(newDonor);
         Login_Frame.getBackButton().fire();
     }
     
@@ -261,6 +262,7 @@ public class CreateUser_Frame extends Application {
         UserBase.recipients.put(newRecipient.getUsername(), newRecipient);
         UserBase.serializeRecipients();
         UserBase.users.put(newRecipient.getUsername(), newRecipient); // needed so that the app can use the new user without closing the app and starting it up again
+        GUIdriver.addUser(newRecipient);
         Login_Frame.getBackButton().fire();
     }
 

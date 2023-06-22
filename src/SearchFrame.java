@@ -30,8 +30,8 @@ public class SearchFrame extends Application{
      * @param args The arguments used to start the program from the command line
      */
     public static void main(String[] args) {
+        System.out.println(UserBase.providers); //TODO remove this in end product; makes it easier to see what should display
         launch(args);
-        // System.out.println(UserBase.providers);
     }
 
     /**
@@ -97,7 +97,7 @@ public class SearchFrame extends Application{
         VBox resultsBox = new VBox();
         resultsBox.setMaxWidth(970);
 
-        //TODO this is testing, adding all the providers; make it only search results
+        //TODO this is testing, adding all the providers; make it only search results; use .clear() to empty the list
         resultsBox.getChildren().addAll(providerPanes.values());
         
         ScrollPane searchResults = new ScrollPane(resultsBox); //TODO figure out how to display a little blurb for every provider here
