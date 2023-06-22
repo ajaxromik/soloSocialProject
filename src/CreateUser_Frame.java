@@ -104,12 +104,12 @@ public class CreateUser_Frame extends Application {
 
         //Only allows numbers into the longitude and latitude, and sets the static variables
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("[0-9]")) 
+            if(!newValue.matches("^[0-9]+\\.?[0-9]*$")) 
                 longitudeField.setText(newValue.replaceAll("[^0-9]",""));
             longitudeValue = Integer.parseInt(longitudeField.getText());
         });
         latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("[0-9]")) 
+            if(!newValue.matches("^[0-9]+\\.?[0-9]*$")) 
                 latitudeField.setText(newValue.replaceAll("[^0-9]",""));
             latitudeValue = Integer.parseInt(latitudeField.getText());
         });
@@ -232,6 +232,7 @@ public class CreateUser_Frame extends Application {
         FoodPantry newFoodPantry = new FoodPantry(userNameTxt, pwTxt, longitudeValue, latitudeValue, name, details);
         UserBase.foodPantrys.put(newFoodPantry.getUsername(), newFoodPantry);
         UserBase.serializeFoodPantrys();
+        UserBase.users.put(newFoodPantry.getUsername(), newFoodPantry); // needed so that the app can use the new user without closing the app and starting it up again
         Login_Frame.getBackButton().fire();
     }
 
@@ -245,6 +246,7 @@ public class CreateUser_Frame extends Application {
         Donor newDonor = new Donor(userNameTxt, pwTxt, longitudeValue, latitudeValue);
         UserBase.donors.put(newDonor.getUsername(), newDonor);
         UserBase.serializeDonors();
+        UserBase.users.put(newDonor.getUsername(), newDonor); // needed so that the app can use the new user without closing the app and starting it up again
         Login_Frame.getBackButton().fire();
     }
     
@@ -258,6 +260,7 @@ public class CreateUser_Frame extends Application {
         Recipient newRecipient = new Recipient(userNameTxt, pwTxt, longitudeValue, latitudeValue);
         UserBase.recipients.put(newRecipient.getUsername(), newRecipient);
         UserBase.serializeRecipients();
+        UserBase.users.put(newRecipient.getUsername(), newRecipient); // needed so that the app can use the new user without closing the app and starting it up again
         Login_Frame.getBackButton().fire();
     }
 

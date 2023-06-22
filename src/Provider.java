@@ -1,7 +1,7 @@
 import java.util.HashMap;
 /**
  * Users that have inventories that can be searched through.
- * @author Julius A. Leone
+ * @author Julius A. Leone, William Carr
  */
 public interface Provider {
     abstract public String getDetails();
@@ -13,5 +13,6 @@ public interface Provider {
     abstract public void addToInventory(String itemType, String itemName, int quantity);
     abstract public void removeFromInventory(Item item);
     abstract public void setItemQuantity(Item item, int quantity);
-    
+    abstract public double getLongitude();
+    abstract public double getLatitude();
 }

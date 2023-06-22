@@ -27,7 +27,7 @@ public class TestingDriver {
         // System.out.println(UserBase.providers);
 
         String s = sc.nextLine();
-        System.out.println(Searcher.getDefault("without").searchProviders(UserBase.providers, s));
+        System.out.println(Searcher.getDefault("contains").searchProviders(UserBase.providers, s));
         
     }
 

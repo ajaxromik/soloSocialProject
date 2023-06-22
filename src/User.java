@@ -45,19 +45,19 @@ abstract public class User implements Serializable{
         this.password = password;
     }
 
-    public double getlongitude() {
+    public double getLongitude() {
         return this.longitude;
     }
 
-    public void setlongitude(double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public double getlatitude() {
+    public double getLatitude() {
         return this.latitude;
     }
 
-    public void setlatitude(double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
     

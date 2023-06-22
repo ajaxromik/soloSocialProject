@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CreateUser_Frame",
+            "request": "launch",
+            "mainClass": "CreateUser_Frame",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
             "name": "SearchFrame",
             "request": "launch",
             "mainClass": "SearchFrame",

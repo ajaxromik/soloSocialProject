@@ -29,7 +29,7 @@ public class GUIdriver extends Application{
      */
     @Override
     public void start(Stage mainStage) {
-        ArrayList<User> users = getUsers();
+        ArrayList<User> users = getUsers(); //this list is not updating when a new user is created
         HomeFrame home = new HomeFrame(mainStage);
         
         // listener for login 
@@ -53,6 +53,10 @@ public class GUIdriver extends Application{
         });
 
         Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildCreatePage(mainStage));
+
+    }
+
+    public void setUsers() { //TODO make this update the users and the buttons that depend on the users
 
     }
 

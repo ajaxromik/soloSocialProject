@@ -60,6 +60,26 @@ public class FoodPantry extends User implements Provider{
     }
 
     /**
+     * Returns the longitude
+     * 
+     * @return The longitude
+     * @author William Carr
+     */
+    public double getLongitude() {
+        return super.getLongitude();
+    }
+
+    /**
+     * Returns the latitude
+     * 
+     * @return The latitude
+     * @author William Carr
+     */
+    public double getLatitude() {
+        return super.getLatitude();
+    }
+
+    /**
      * FoodPantry toString method.
      * 
      * @author William Carr
