@@ -18,6 +18,13 @@ public class Searcher {
         defaultFilters.put("contains",new Searcher((provider, string) -> provider.getName().toLowerCase().contains(string.toLowerCase())));
         //filter for name that does not have a keyword
         defaultFilters.put("without",new Searcher((provider, string) -> !provider.getName().toLowerCase().contains(string.toLowerCase())));
+        //if inventory has an item that contains keyword
+        defaultFilters.put("has", new Searcher(
+            (provider, string) -> provider.getInventory()
+                                          .keySet()
+                                          .stream()
+                                          .anyMatch(item -> item.getItemName().toLowerCase().contains(string.toLowerCase()))
+        ));
     }
 
     private BiPredicate<Provider, String> filter;
