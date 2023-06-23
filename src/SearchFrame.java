@@ -49,6 +49,13 @@ public class SearchFrame extends Application{
 
     private static Map<String,BorderPane> providerPanes;
     static {
+        updateProviderPanes();
+    }
+
+    /**
+     * Creating the provider panes must be done in a method in case it needs to be updated later on.
+     */
+    public static void updateProviderPanes() {
         providerPanes = 
         UserBase.providers.entrySet()
                           .stream() // stream of entries, a great way to give you a headache
@@ -60,7 +67,7 @@ public class SearchFrame extends Application{
                                 providerPane.setPadding(new Insets(15));
                                 providerPane.setMaxSize(940,250);
 
-                                Label header = new Label(String.format("%s (%.8f, %.8f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
+                                Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
                                 Button seeMoreButton = new Button("See More"); // figure out how to make this link to a new provider frame for each provider
                                 Text details = new Text(provider.getDetails()+"\n"
                                 +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet()));// details and inventory, if it's not empty

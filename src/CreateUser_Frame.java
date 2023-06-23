@@ -231,8 +231,12 @@ public class CreateUser_Frame extends Application {
         FoodPantry newFoodPantry = new FoodPantry(userNameTxt, pwTxt, longitudeValue, latitudeValue, name, details);
         UserBase.foodPantrys.put(newFoodPantry.getUsername(), newFoodPantry);
         UserBase.serializeFoodPantrys();
-        UserBase.users.put(newFoodPantry.getUsername(), newFoodPantry); // needed so that the app can use the new user without closing the app and starting it up again
+
+        //makes sure that the app is updated in all necessary areas
+        UserBase.users.put(newFoodPantry.getUsername(), newFoodPantry);
         GUIdriver.addUser(newFoodPantry);
+        SearchFrame.updateProviderPanes();
+
         Login_Frame.getBackButton().fire();
     }
 
