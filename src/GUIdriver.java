@@ -39,7 +39,7 @@ public class GUIdriver extends Application{
         home.getLoginButton().setOnAction(e -> Login_Frame.buildLoginPage(mainStage, users));
 
         //permission-based home button listeners
-        home.getSearchButton().setOnAction(e -> System.out.println("searching...sasdfasdf"));// TODO replace this with real connection to search screen
+        home.getSearchButton().setOnAction(e -> SearchFrame.buildSearchPage(mainStage));
         
         Login_Frame.getBackButton().setOnAction(e -> { // the code in this button is how the screen returns to the home screen, and is called with a fire() method in Login_Frame
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
@@ -59,6 +59,7 @@ public class GUIdriver extends Application{
 
         Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildCreatePage(mainStage));
         SearchFrame.getBackButton().setOnAction(e -> mainStage.setScene(home.getScene()));
+
     }
 
     /**
