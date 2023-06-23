@@ -4,6 +4,7 @@ import java.util.HashMap;
  * @author Julius A. Leone, William Carr
  */
 public interface Provider {
+    abstract public String getUsername();
     abstract public String getDetails();
     abstract public String getName();
     abstract public HashMap<Item, Integer> getInventory();
