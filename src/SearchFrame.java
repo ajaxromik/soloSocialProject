@@ -30,7 +30,6 @@ public class SearchFrame extends Application{
      * @param args The arguments used to start the program from the command line
      */
     public static void main(String[] args) {
-        System.out.println(UserBase.providers); //TODO remove this in end product; makes it easier to see what should display
         launch(args);
     }
 
@@ -54,6 +53,8 @@ public class SearchFrame extends Application{
 
     /**
      * Creating the provider panes must be done in a method in case it needs to be updated later on.
+     * NOTE: This function is for creating provider panes to be used later.
+     * It is NOT made for updating the visible provider panes; see searchUsers()
      */
     public static void updateProviderPanes() {
         providerPanes = 
@@ -68,9 +69,13 @@ public class SearchFrame extends Application{
                                 providerPane.setMaxSize(940,250);
 
                                 Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
-                                Button seeMoreButton = new Button("See More"); // figure out how to make this link to a new provider frame for each provider
+                                Button seeMoreButton = new Button("See More"); // TODO make this link to a new provider frame for each provider
+                                seeMoreButton.setOnAction(e -> System.out.printf("%s%n%n", provider.toString()));
                                 Text details = new Text(provider.getDetails()+"\n"
-                                +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet()));// details and inventory, if it's not empty
+                                +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet().stream().map(
+                                    item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
+                                ).collect(Collectors.toList())));// details and inventory, if it's not empty
+                                details.setWrappingWidth(925);
 
                                 providerPane.setLeft(header);
                                 providerPane.setRight(seeMoreButton);
@@ -107,21 +112,26 @@ public class SearchFrame extends Application{
         //TODO this is testing, adding all the providers; make it only search results; use .clear() to empty the list
         resultsBox.getChildren().addAll(providerPanes.values());
         
-        ScrollPane searchResults = new ScrollPane(resultsBox); //TODO figure out how to display a little blurb for every provider here
+        ScrollPane searchResults = new ScrollPane(resultsBox);
         searchResults.setHbarPolicy(ScrollBarPolicy.NEVER);
         searchResults.setVbarPolicy(ScrollBarPolicy.ALWAYS);
         searchResults.setPannable(true);
+        searchResults.setMaxWidth(970);
         searchResults.setMinWidth(970);
 
         // search keyword
         Label searchLabel = new Label("Search:");
-        TextField keywordBox = new TextField(); //TODO add the searching eventlistener here
+        TextField keywordBox = new TextField();
 
         //filter selection
         Label filterLabel = new Label("Search by:");
-        ComboBox<String> filterBox = new ComboBox<String>(); // TODO add filtering eventlistener here
-		filterBox.setPromptText("Filters");
+        ComboBox<String> filterBox = new ComboBox<String>();
+		filterBox.setValue("Filters");
 		filterBox.getItems().addAll("Name", "Not in Name", "Inventory", "Not in Inventory");
+        
+        // actual searching
+        keywordBox.setOnKeyReleased(e -> searchUsers(resultsBox, getFilter(filterBox.getValue()), keywordBox.getText()));
+        filterBox.setOnAction(e -> searchUsers(resultsBox, getFilter(filterBox.getValue()), keywordBox.getText()));
 
         // search and filter area
         HBox inputArea = new HBox(15);
@@ -142,6 +152,36 @@ public class SearchFrame extends Application{
         Scene searchScene = new Scene(borderPane, 1000, 600);
 		mainStage.setScene(searchScene);
 		mainStage.show();
+    }
+
+    /**
+     * Searches for the users and updates the VBox for it
+     * @param destination The VBox to update
+     * @param filter The name of the default filter, saved in Searcher, that we will use to search with
+     * @param keyword The contents of the search bar, regardless of how many words it is
+     */
+    private static void searchUsers(VBox destination, String filter, String keyword){
+        System.out.printf("searched for \"%2$s\" with \"%1$s\" filter%n",filter,keyword);//TODO remove this
+        destination.getChildren().clear();
+        Searcher.getDefault(filter)
+                .searchProviders(new ArrayList<Provider>(UserBase.providers.values()), keyword)
+                .stream()
+                .forEach(provider -> destination.getChildren()
+                                                .add(providerPanes.get(provider.getUsername())));
+    }
+
+    /**
+     * Gets the right default Searcher filter based on the selected filter. Is case sensitive.
+     * 
+     * @param displayed The string in the ComboBox
+     * @return The string key of the default Searcher
+     */
+    private static String getFilter(String displayed) {
+        // if(displayed.equals("Filters") || displayed.equals("Name"))
+        //     return "contains";
+        if(displayed.equals("Not in Name")) return "without";
+        else if(displayed.equals("Inventory")) return "has"; // TODO maybe handle has different when search is empty
+        else return "contains";
     }
 
 }
