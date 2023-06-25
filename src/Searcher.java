@@ -13,17 +13,25 @@ public class Searcher {
 
     private static HashMap<String, Searcher> defaultFilters = new HashMap<String,Searcher>(); // holds the default filters
 
-    static { //TODO maybe add filters called "has" and "lacks" to check if they have any items in inventory with keyword
+    static {
         //filter for name that contains a keyword
         defaultFilters.put("contains",new Searcher((provider, string) -> provider.getName().toLowerCase().contains(string.toLowerCase())));
         //filter for name that does not have a keyword
         defaultFilters.put("without",new Searcher((provider, string) -> !provider.getName().toLowerCase().contains(string.toLowerCase())));
         //if inventory has an item that contains keyword
         defaultFilters.put("has", new Searcher(
+            (provider, string) -> (provider.getInventory().isEmpty() && string.equals("")) || //if search bar is empty and so is the inventory, don't change anything
+            provider.getInventory()
+                    .keySet()
+                    .stream()
+                    .anyMatch(item -> item.getItemName().toLowerCase().contains(string.toLowerCase()))
+        ));
+        //if inventory doesn't have an item that contains keyword
+        defaultFilters.put("lacks", new Searcher(
             (provider, string) -> provider.getInventory()
                                           .keySet()
                                           .stream()
-                                          .anyMatch(item -> item.getItemName().toLowerCase().contains(string.toLowerCase()))
+                                          .anyMatch(item -> !(item.getItemName().toLowerCase().contains(string.toLowerCase())))
         ));
     }
 
