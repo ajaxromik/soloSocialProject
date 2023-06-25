@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
+import java.util.Random;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import java.util.HashMap;
  */
 public class CreateUser_Frame extends Application {
 
-    private static final HashMap<String, User> userMap = UserBase.users;
+    private static final HashMap<String, User> USER_MAP = UserBase.users;
 
     // ----- testing methods -----
     public static void main(String[] args) {
@@ -104,12 +104,12 @@ public class CreateUser_Frame extends Application {
         //Only allows numbers into the longitude and latitude, and sets the static variables
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.matches("^[0-9]+\\.?[0-9]*$")) 
-                longitudeField.setText(newValue.replaceAll("[^0-9]",""));
+                longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
             longitudeValue = Integer.parseInt(longitudeField.getText());
         });
         latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.matches("^[0-9]+\\.?[0-9]*$")) 
-                latitudeField.setText(newValue.replaceAll("[^0-9]",""));
+                latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
             latitudeValue = Integer.parseInt(latitudeField.getText());
         });
 
@@ -120,24 +120,29 @@ public class CreateUser_Frame extends Application {
         grid.add(statusLbl, 1, 7);
 
         btn.setOnAction(event -> {
-            userNameTxt = userTextField.getText();
-            pwTxt = pwBox.getText();
-            String pwTxt2 = pwBox2.getText();
+            try {
+                userNameTxt = userTextField.getText();
+                pwTxt = pwBox.getText();
+                String pwTxt2 = pwBox2.getText();
 
-            if (!pwTxt.equals(pwTxt2)) {
-                statusLbl.setText("Passwords do not match!");
+                if (!pwTxt.equals(pwTxt2)) {
+                    statusLbl.setText("Passwords do not match!");
+                    return;
+                }
+
+                if (USER_MAP.containsKey(userNameTxt)) {
+                    throw new UserAlreadyExistsException(userNameTxt);
+                }
+                
+                if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
+                    statusLbl.setText("Fields can not be blank!");
+                    return;
+                }
+            } catch(UserAlreadyExistsException ex) {
+                statusLbl.setText("User already exists!\nYou could try '"+ex.getSuggestedUsername()+"' for a username.");
                 return;
-            }
-
-            if (userMap.containsKey(userNameTxt)) {
-                statusLbl.setText("User already exists!");
-                throw new UserAlreadyExistsException("User already exists!");
-
-            }
-            
-            if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
-                statusLbl.setText("Fields can not be blank!");
-                return;
+            } catch(Exception ex) {
+                ex.printStackTrace();
             }
             
             statusLbl.setText("User created successfully!");
@@ -269,39 +274,47 @@ public class CreateUser_Frame extends Application {
         Login_Frame.getBackButton().fire();
     }
 
-    //already done in userbase
-    private void writeUserMapToFile() {
-        StringBuilder sb = new StringBuilder();
-    
-        for (String username : userMap.keySet()) {
-            sb.append("[").append(username).append(",").append(userMap.get(username)).append("],");
-        }
-    
-        // Remove the last comma
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 1);
-        }
-    
-        // Write to file
-        try {
-            FileWriter writer = new FileWriter("[usernames,passwords].txt");
-            writer.write(sb.toString());
-            writer.close();
-        } catch (IOException e) {
-            System.err.println("Failed to write usernames to file: " + e.getMessage());
-        }
-    }
-    
-
-
     /**
      * A custom exception to show our message, must be static as we have no instance of CreateUserFrame
      * 
-     * @author Mary Moor, William Carr
+     * @author William Carr
      */
-    public static class UserAlreadyExistsException extends RuntimeException {
-        public UserAlreadyExistsException(String message) {
-            super(message);
+    private static class UserAlreadyExistsException extends Exception {
+
+        private String newUsername;
+
+        /**
+         * Creates a UserAlreadyExistsException
+         * @param username The username that already exists
+         */
+        public UserAlreadyExistsException(String username) {
+            newUsername = getNewUsername(username);
+        }
+
+        /**
+         * Gets the username suggested by the system.
+         * 
+         * @return The new suggested username.
+         */
+        public String getSuggestedUsername() {
+            return newUsername;
+        }
+
+        /**
+         * Creates a new username based on the old, and makes sure the database does not have it
+         * @param username The pre-existing username
+         * @return A new username that is in the system
+         */
+        private String getNewUsername(String username) {
+            boolean duplicate = true;
+            int num = 0;
+            while(duplicate && num <= Integer.MAX_VALUE) {
+                if(USER_MAP.containsKey(username+num))
+                    num++;
+                else //userbase does not have a user with this username and number
+                    duplicate = false;
+            }
+            return username+num;
         }
     }
 }
