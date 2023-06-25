@@ -235,7 +235,6 @@ public class CreateUser_Frame extends Application {
         //makes sure that the app is updated in all necessary areas
         UserBase.users.put(newFoodPantry.getUsername(), newFoodPantry);
         GUIdriver.addUser(newFoodPantry);
-        SearchFrame.updateProviderPanes();
 
         Login_Frame.getBackButton().fire();
     }
