@@ -26,13 +26,13 @@ public class TestingDriver {
         
         // UserBase.providers.get("soups").addToInventory("FOOD", "Soup Can", 500);
         // UserBase.serializeFoodPantrys();
-        // System.out.println(UserBase.providers);
+        System.out.println(UserBase.users);
 
         // String s = sc.nextLine();
-        Searcher.getDefault("contains")
-                .searchProviders(new ArrayList<Provider>(UserBase.providers.values()), "so")
-                .stream()
-                .forEach(provider -> System.out.println(provider.getUsername()));
+        // Searcher.getDefault("contains")
+        //         .searchProviders(new ArrayList<Provider>(UserBase.providers.values()), "so")
+        //         .stream()
+        //         .forEach(provider -> System.out.println(provider.getUsername()));
         
     }
 

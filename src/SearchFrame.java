@@ -35,7 +35,7 @@ public class SearchFrame extends Application{
 
     /**
      * Makes it possible to test this class.
-     * Keep in mind this is purely for UI appearance testing and it has no functionality.
+     * Keep in mind this is purely for UI appearance testing and it has limited functionality.
      * 
      * @param mainStage The stage to add the home page onto.
      */
@@ -47,43 +47,6 @@ public class SearchFrame extends Application{
     // ----- end of testing methods -----
 
     private static Map<String,BorderPane> providerPanes;
-    static {
-        updateProviderPanes();
-    }
-
-    /**
-     * Creating the provider panes must be done in a method in case it needs to be updated later on.
-     * NOTE: This function is for creating provider panes to be used later.
-     * It is NOT made for updating the visible provider panes; see searchUsers()
-     */
-    public static void updateProviderPanes() {
-        providerPanes = 
-        UserBase.providers.entrySet()
-                          .stream() // stream of entries, a great way to give you a headache
-                          .collect(Collectors.toMap(
-                            Map.Entry::getKey, // use the key of the current mapping of name to provider
-                            entry -> {
-                                Provider provider = entry.getValue();
-                                BorderPane providerPane = new BorderPane();
-                                providerPane.setPadding(new Insets(15));
-                                providerPane.setMaxSize(940,250);
-
-                                Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
-                                Button seeMoreButton = new Button("See More"); // TODO make this link to a new provider frame for each provider
-                                seeMoreButton.setOnAction(e -> System.out.printf("%s%n%n", provider.toString()));
-                                Text details = new Text(provider.getDetails()+"\n"
-                                +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet().stream().map(
-                                    item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
-                                ).collect(Collectors.toList())));// details and inventory, if it's not empty
-                                details.setWrappingWidth(925);
-
-                                providerPane.setLeft(header);
-                                providerPane.setRight(seeMoreButton);
-                                providerPane.setBottom(details);
-                                return providerPane; //return a custom pane for each one
-                            }
-                          ));
-    }
 
     //held separately to inject the code to return to the rest of the program
     private static Button backButton = new Button("Back");
@@ -99,7 +62,8 @@ public class SearchFrame extends Application{
     }
 
     /**
-     * Creates a new Search page, so that the old search filters and keywords are reset.
+     * Creates a new Search page and switches the stage to it.
+     * Resets search and filters, and is necessary to update the providers whenever they are changed.
      * 
      * @param mainStage The stage to put the SearchFrame into
      */
@@ -108,9 +72,6 @@ public class SearchFrame extends Application{
         // search results
         VBox resultsBox = new VBox();
         resultsBox.setMaxWidth(970);
-
-        //TODO this is testing, adding all the providers; make it only search results; use .clear() to empty the list
-        resultsBox.getChildren().addAll(providerPanes.values());
         
         ScrollPane searchResults = new ScrollPane(resultsBox);
         searchResults.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -148,10 +109,57 @@ public class SearchFrame extends Application{
         borderPane.setPadding(new Insets(15));
         borderPane.setTop(topArea);
         borderPane.setLeft(searchResults);
-
+        
         Scene searchScene = new Scene(borderPane, 1000, 600);
+        updateProviderPanes(mainStage, searchScene); // fills out the providerPanes for the first time
+
+        // by default, the results will show everything, since nothing is searched and the default search method is by name
+        resultsBox.getChildren().addAll(providerPanes.values()); // below the scene creation because waiting for "updateProviderPanes"
+
 		mainStage.setScene(searchScene);
 		mainStage.show();
+    }
+
+    /**
+     * Creating the provider panes must be done in a method in case it needs to be updated later on.
+     * NOTE: This function is for creating provider panes to be used later.
+     * It is NOT made for updating the visiblity of provider panes; see searchUsers()
+     * 
+     * @param mainStage The main stage of the application. Is a necessary parameter for the "See More" buttons to work.
+     * @param scene The scene that the ProviderDetailsFrame's back button returns to.
+     */
+    private static void updateProviderPanes(Stage mainStage, Scene scene) {
+        providerPanes = 
+        UserBase.providers.entrySet()
+                          .stream() // stream of entries, a great way to give you a headache
+                          .collect(Collectors.toMap(
+                            Map.Entry::getKey, // use the key of the current mapping of name to provider
+                            entry -> {
+                                Provider provider = entry.getValue();
+                                BorderPane providerPane = new BorderPane();
+                                providerPane.setPadding(new Insets(15));
+                                providerPane.setMaxSize(940,250);
+
+                                Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
+                                Button seeMoreButton = new Button("See More");
+
+                                //sets up the provider's frame and the button for it
+                                ProviderDetailsFrame provFrame = new ProviderDetailsFrame(provider);
+                                seeMoreButton.setOnAction(e -> mainStage.setScene(provFrame.getScene())); // see more goes to provider's frame
+                                provFrame.getBackButton().setOnAction(e -> mainStage.setScene(scene)); // back button goes to the scene param
+
+                                Text details = new Text(provider.getDetails()+"\n"
+                                +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet().stream().map(
+                                    item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
+                                ).collect(Collectors.toList())));// details and inventory, if it's not empty
+                                details.setWrappingWidth(925);
+
+                                providerPane.setLeft(header);
+                                providerPane.setRight(seeMoreButton);
+                                providerPane.setBottom(details);
+                                return providerPane; //return a custom pane for each one
+                            }
+                          ));
     }
 
     /**
