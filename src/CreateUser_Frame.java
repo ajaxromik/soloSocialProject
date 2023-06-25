@@ -11,9 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.util.Random;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 
 //TODO: Fix when nothing in username or password it dose not create a new user! 
