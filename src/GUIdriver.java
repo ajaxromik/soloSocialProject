@@ -33,6 +33,9 @@ public class GUIdriver extends Application{
     @Override
     public void start(Stage mainStage) {
 
+        // a lot of the beauty of the app is useless if you resize it
+        mainStage.setResizable(false); 
+
         HomeFrame home = new HomeFrame(mainStage);
         
         // listener for login 
@@ -45,7 +48,6 @@ public class GUIdriver extends Application{
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
                 home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions()); // no matter what type of user, get the button permissions for them
 
-                //TODO make this its own change login method and logout method
                 home.getLoginButton().setText("Log out of: "+Login_Frame.getLoggedInUser().getUsername());
                 home.getLoginButton().setOnAction(event -> {Login_Frame.logout(); Login_Frame.buildLoginPage(mainStage, users);}); 
             } else { // how we change the home frame if we are not logged in
