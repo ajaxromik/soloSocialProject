@@ -171,17 +171,17 @@ public class SearchFrame extends Application{
     }
 
     /**
-     * Gets the right default Searcher filter based on the selected filter. Is case sensitive.
+     * Gets the right default Searcher filter based on the selected filter. 
+     * Is case sensitive to the text of the filterBox.
      * 
      * @param displayed The string in the ComboBox
      * @return The string key of the default Searcher
      */
     private static String getFilter(String displayed) {
-        // if(displayed.equals("Filters") || displayed.equals("Name"))
-        //     return "contains";
-        if(displayed.equals("Not in Name")) return "without";
-        else if(displayed.equals("Inventory")) return "has"; // TODO maybe handle has different when search is empty
-        else return "contains";
+        if(displayed.equals("Not in Name")) return "without"; //for people looking for random options
+        else if(displayed.equals("Inventory")) return "has";
+        else if(displayed.equals("Not in Inventory")) return "lacks";// if people want to donate maybe
+        else return "contains"; //regular search by company name
     }
 
 }
