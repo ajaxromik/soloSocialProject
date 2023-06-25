@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 /**
