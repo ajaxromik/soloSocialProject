@@ -19,20 +19,16 @@ public class Searcher {
         //filter for name that does not have a keyword
         defaultFilters.put("without",new Searcher((provider, string) -> !provider.getName().toLowerCase().contains(string.toLowerCase())));
         //if inventory has an item that contains keyword
-        defaultFilters.put("has", new Searcher(
+        BiPredicate<Provider, String> hasBP = (
             (provider, string) -> (provider.getInventory().isEmpty() && string.equals("")) || //if search bar is empty and so is the inventory, don't change anything
             provider.getInventory()
                     .keySet()
                     .stream()
                     .anyMatch(item -> item.getItemName().toLowerCase().contains(string.toLowerCase()))
-        ));
+        );
+        defaultFilters.put("has", new Searcher(hasBP));
         //if inventory doesn't have an item that contains keyword
-        defaultFilters.put("lacks", new Searcher(
-            (provider, string) -> provider.getInventory()
-                                          .keySet()
-                                          .stream()
-                                          .anyMatch(item -> !(item.getItemName().toLowerCase().contains(string.toLowerCase())))
-        ));
+        defaultFilters.put("lacks", new Searcher(hasBP.negate())); // the opposite of the hasBP
     }
 
     private BiPredicate<Provider, String> filter;
