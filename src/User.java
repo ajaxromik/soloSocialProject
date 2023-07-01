@@ -1,6 +1,13 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.Node;
 
 /**
  * A class representing a user account of the application.
@@ -77,6 +84,42 @@ abstract public class User implements Serializable{
                "\npassword: "+password+
                "\nlongitude: "+longitude+
                "\nlatitude: "+latitude;
+    }
+
+    /**
+     * Returns a list of Nodes. The first node is a GridPane and should be added to the EditUserFrame.
+     * The second and following Nodes are the TextFields that need to be used by the edit user frame.
+     * @return An ArrayList of Nodes that always has a GridPane as its first item, and will always have at least two Nodes more than that. (long & lat)
+     */
+    public ArrayList<Node> getUserFields() {
+
+        GridPane inputArea = new GridPane();
+        inputArea.setAlignment(Pos.CENTER);
+        inputArea.setHgap(10);
+        inputArea.setVgap(10);
+        inputArea.setPadding(new Insets(25));
+        
+        // basic user details //TODO consider adding password changing
+        Label longitudeLabel = new Label("Longitude:");
+        inputArea.add(longitudeLabel, 0, 0);
+
+        TextField longitudeField = new TextField(); //TODO make the create user frame lambda for changing the long & lat into a static var to use here too
+        longitudeField.setText(""+this.longitude);
+        inputArea.add(longitudeField, 1, 0);
+
+        Label latitudeLabel = new Label("Latitude:");
+        inputArea.add(latitudeLabel, 0, 1);
+
+        TextField latitudeField = new TextField();
+        latitudeField.setText(""+this.latitude);
+        inputArea.add(latitudeField, 1, 1);
+        
+        ArrayList<Node> userFields = new ArrayList<Node>();
+        userFields.add(inputArea);
+        userFields.add(longitudeField);
+        userFields.add(latitudeField);
+
+        return userFields;
     }
 
     /**
