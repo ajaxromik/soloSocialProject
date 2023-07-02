@@ -1,10 +1,17 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import java.util.logging.Level;
 
 /**
@@ -117,7 +124,7 @@ public class FoodPantry extends User implements Provider{
         ArrayList<Node> userFields = super.getUserFields();
         GridPane inputArea = (GridPane)userFields.get(0);
         
-        // basic user details
+        // additional details
         Label nameLabel = new Label("Name:");
         inputArea.add(nameLabel, 0, 2);
 
@@ -128,9 +135,38 @@ public class FoodPantry extends User implements Provider{
         Label detailsLabel = new Label("Details:");
         inputArea.add(detailsLabel, 0, 3);
 
-        TextField detailsField = new TextField();
+        TextField detailsField = new TextField(); //TODO make this into a bigger box
         detailsField.setText(""+this.details);
         inputArea.add(detailsField, 1, 3);
+
+        // inventory section
+        VBox inventoryBox = new VBox(15.0);
+        inventoryBox.setPadding(new Insets(10));
+        inventoryBox.setMaxWidth(240);
+        inventoryBox.setPrefHeight(150);
+        inventory.forEach((item, integer) -> { //each item of inventory //TODO make the inventory editable
+            BorderPane itemPane = new BorderPane();
+            itemPane.setMinWidth(240);
+
+            Label itemName = new Label(item.getItemName());
+            itemPane.setLeft(itemName);
+
+            TextField countField = new TextField(integer.toString());
+            countField.setPrefWidth(55);
+            itemPane.setRight(countField); // TODO make the integer editable later
+            
+            BorderPane.setAlignment(itemName, Pos.CENTER_LEFT);//vertically centering the two
+            BorderPane.setAlignment(countField, Pos.CENTER_RIGHT);
+
+            inventoryBox.getChildren().add(itemPane);
+        }); //TODO to finish the inventory, make a text thing to add an item and an add button
+        
+        // making it a part of the grid
+        ScrollPane inventoryPane = new ScrollPane(inventoryBox);
+        inventoryPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+        inventoryPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        inventoryPane.setPannable(true);
+        inputArea.add(inventoryPane, 0, 4, 2, 1);
         
         userFields.add(nameField);
         userFields.add(detailsField);
