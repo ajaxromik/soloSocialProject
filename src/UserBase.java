@@ -84,5 +84,16 @@ abstract public class UserBase {
             ex.printStackTrace();
         }
     }
+
+    /**
+     * Serializes all users in the event that the type is unknown.
+     * 
+     * @author William Carr
+     */
+    public static void serializeUsers() {
+        serializeDonors();
+        serializeRecipients();
+        serializeFoodPantrys();
+    }
     
 }
