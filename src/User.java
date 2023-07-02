@@ -87,11 +87,21 @@ abstract public class User implements Serializable{
     }
 
     /**
+     * Uses the TextFields from the userFields Array and updates the values of the instance variables.
+     * @param userFields The ArrayList from the getUserFields method. Index 1 should be longitude and index 2 should be latitude.
+     */
+    public void updateUserFields(ArrayList<Node> userFields) { // TODO testing; add the changes to database after this
+        setLongitude(Double.parseDouble(((TextField)userFields.get(1)).getText()));
+        setLatitude(Double.parseDouble(((TextField)userFields.get(2)).getText()));
+        UserBase.serializeUsers();
+    }
+
+    /** //TODO needs a function that takes the ArrayList and updates the user fields
      * Returns a list of Nodes. The first node is a GridPane and should be added to the EditUserFrame.
      * The second and following Nodes are the TextFields that need to be used by the edit user frame.
      * @return An ArrayList of Nodes that always has a GridPane as its first item, and will always have at least two Nodes more than that. (long & lat)
      */
-    public ArrayList<Node> getUserFields() {
+    public ArrayList<Node> getUserFields() { //TODO need to add this method to subclasses
 
         GridPane inputArea = new GridPane();
         inputArea.setAlignment(Pos.CENTER);
@@ -105,6 +115,10 @@ abstract public class User implements Serializable{
 
         TextField longitudeField = new TextField(); //TODO make the create user frame lambda for changing the long & lat into a static var to use here too
         longitudeField.setText(""+this.longitude);
+        longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
+                longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+        });
         inputArea.add(longitudeField, 1, 0);
 
         Label latitudeLabel = new Label("Latitude:");
@@ -112,6 +126,10 @@ abstract public class User implements Serializable{
 
         TextField latitudeField = new TextField();
         latitudeField.setText(""+this.latitude);
+        latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
+                latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+        });
         inputArea.add(latitudeField, 1, 1);
         
         ArrayList<Node> userFields = new ArrayList<Node>();

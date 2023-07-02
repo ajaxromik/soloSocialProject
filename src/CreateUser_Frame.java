@@ -100,12 +100,12 @@ public class CreateUser_Frame extends Application {
 
         //Only allows numbers into the longitude and latitude, and sets the static variables
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[0-9]+\\.?[0-9]*$")) 
+            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
                 longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
             longitudeValue = Integer.parseInt(longitudeField.getText());
         });
         latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[0-9]+\\.?[0-9]*$")) 
+            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
                 latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
             latitudeValue = Integer.parseInt(latitudeField.getText());
         });

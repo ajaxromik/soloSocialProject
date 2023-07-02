@@ -1,5 +1,14 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+
 import java.util.logging.Level;
 
 /**
@@ -91,6 +100,47 @@ public class FoodPantry extends User implements Provider{
                "\ndetails: "+details;
     }
     
+    /**
+     * Uses the TextFields from the userFields Array and updates the values of the instance variables.
+     * @param userFields The ArrayList from the getUserFields method. Index 1 should be longitude and index 2 should be latitude.
+     */
+    public void updateUserFields(ArrayList<Node> userFields) { // TODO testing; add the changes to database after this
+        super.updateUserFields(userFields);
+        setName(((TextField)userFields.get(3)).getText());
+        setDetails(((TextField)userFields.get(4)).getText());
+        UserBase.serializeUsers();
+    }
+
+    /** //TODO needs a function that takes the ArrayList and updates the user fields
+     * Returns a list of Nodes. The first node is a GridPane and should be added to the EditUserFrame.
+     * The second and following Nodes are the TextFields that need to be used by the edit user frame.
+     * @return An ArrayList of Nodes that always has a GridPane as its first item, and will always have at least two Nodes more than that. (long & lat)
+     */
+    public ArrayList<Node> getUserFields() { //TODO need to add this method to subclasses
+
+        ArrayList<Node> userFields = super.getUserFields();
+        GridPane inputArea = (GridPane)userFields.get(0);
+        
+        // basic user details
+        Label nameLabel = new Label("Name:");
+        inputArea.add(nameLabel, 0, 2);
+
+        TextField nameField = new TextField();
+        nameField.setText(""+this.name);
+        inputArea.add(nameField, 1, 2);
+
+        Label detailsLabel = new Label("Details:");
+        inputArea.add(detailsLabel, 0, 3);
+
+        TextField detailsField = new TextField();
+        detailsField.setText(""+this.details);
+        inputArea.add(detailsField, 1, 3);
+        
+        userFields.add(nameField);
+        userFields.add(detailsField);
+
+        return userFields;
+    }
 
     /**
      * checks if an item is in the inventory and they have at least one of it based off the name.

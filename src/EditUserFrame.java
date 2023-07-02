@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +42,8 @@ public class EditUserFrame extends Application{
      * Tests the program with a test foodpantry
      */
     public void start(Stage mainStage) {
-        createPage(mainStage, new FoodPantry("testing", "pw", 30, 30, "bob's discount furniture", "bob sell furnies")); //TODO testing
+        // createPage(mainStage, new FoodPantry("testing", "pw", 30, 30, "bob's discount furniture", "bob sell furnies")); //TODO testing
+        createPage(mainStage, UserBase.users.get("theShop"));
     }
 
     /**
@@ -49,11 +53,14 @@ public class EditUserFrame extends Application{
      */
     public static void createPage(Stage mainStage, User user) {
 
+        // userfields needed later
+        ArrayList<Node> userFields = user.getUserFields();
+
         //sets up the top area
         Label header = new Label("Edit User Information");
         header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
-        backButton = new Button("Back");//TODO reconsider placement later
+        backButton = new Button("Back");
 
         // formatting
         BorderPane headPane = new BorderPane();
@@ -62,14 +69,30 @@ public class EditUserFrame extends Application{
         BorderPane backPane = new BorderPane();
         backPane.setRight(backButton);
 
+        // submit button/area
+        Button submitButton = new Button("Submit");
+        submitButton.setOnAction(e -> {
+            user.updateUserFields(userFields);
+            // userFields.forEach(f -> System.out.println((f instanceof TextField) ? ""+Double.parseDouble(((TextField)f).getText()) : "not a textfield")); //TODO added for testing, remove when done
+            System.out.println(UserBase.users.get("theShop")); //TODO testing
+            backButton.fire();
+        });
+        BorderPane submittalPane = new BorderPane();
+        submittalPane.setRight(submitButton);
+
         //final setup
         GridPane mainPane = new GridPane();
         mainPane.setPadding(new Insets(20));
+
+        // spaced the gridpane additions by row
         mainPane.add(headPane, 0, 0);
         mainPane.add(backPane, 1, 0);
-        mainPane.add(user.getUserFields().get(0), 0, 1, 2, 1); // makes input area centered  // TODO adding the user's stuff
 
-        Scene finalScene = new Scene(mainPane); //TODO make sure this happens after the user specific fields appear
+        mainPane.add(userFields.get(0), 0, 1, 2, 1); // makes input area centered
+
+        mainPane.add(submittalPane, 1, 2);
+
+        Scene finalScene = new Scene(mainPane);
         mainStage.setScene(finalScene);
         mainStage.show();
     }
