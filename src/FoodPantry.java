@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -114,26 +115,29 @@ public class FoodPantry extends User implements Provider{
         super.updateUserFields(userFields);
         setName(((TextField)userFields.get(3)).getText());
         setDetails(((TextField)userFields.get(4)).getText());
+        
+        HashMap<Item,Integer> tempMap = new HashMap<Item,Integer>();
         ((VBox)userFields.get(5)).getChildren().forEach(node ->{
             BorderPane pane = (BorderPane)node;
             int value = Integer.parseInt(((TextField)pane.getRight()).getText()); // value that the user interacted with
 
             inventory.forEach((item, count) -> {
-                if(item.getItemName().equals(((Label)pane.getLeft()).getText())) {
-                    if(value == 0) inventory.remove(item);
-                    else inventory.put(item, value); // changes value in the system
+                if(item.getItemName().equals(((Label)pane.getLeft()).getText())) { //finds the item for this pane
+                    if(value != 0) tempMap.put(item, value); // changes value in the system, only adds if its value is not 0
                 }
             });
         });
+        inventory = tempMap;
+
         UserBase.serializeUsers();
     }
 
-    /** //TODO needs a function that takes the ArrayList and updates the user fields
+    /**
      * Returns a list of Nodes. The first node is a GridPane and should be added to the EditUserFrame.
      * The second and following Nodes are the TextFields that need to be used by the edit user frame.
      * @return An ArrayList of Nodes that always has a GridPane as its first item, and will always have at least two Nodes more than that. (long & lat)
      */
-    public ArrayList<Node> getUserFields() { //TODO need to add this method to subclasses
+    public ArrayList<Node> getUserFields() {
 
         ArrayList<Node> userFields = super.getUserFields();
         GridPane inputArea = (GridPane)userFields.get(0);
@@ -160,7 +164,7 @@ public class FoodPantry extends User implements Provider{
         inventoryBox.setPrefHeight(150);
 
         // adding the itempane
-        BiConsumer<Item, Integer> addItemPane = (item, integer) -> { //each item of inventory //TODO make the inventory editable
+        BiConsumer<Item, Integer> addItemPane = (item, integer) -> { //each item of inventory
             BorderPane itemPane = new BorderPane();
             itemPane.setMinWidth(240);
 
@@ -194,12 +198,22 @@ public class FoodPantry extends User implements Provider{
         TextField itemNameField = new TextField();
 
         ChoiceBox<String> itemTypes = new ChoiceBox<String>();
-		itemTypes.getItems().addAll(ItemType.getItemTypes()); //calling the account type recipient feels weird
-		itemTypes.setValue(ItemType.getItemTypes().get(0));
+		itemTypes.getItems().addAll(ItemType.getItemTypes().keySet()); //calling the account type recipient feels weird
+		itemTypes.setValue(ItemType.DEFAULT_ITEM_TYPE);
+        itemTypes.setPrefWidth(160);
+
+        Button addButton = new Button("Add");
+        addButton.setOnAction(e -> {
+            Item addedItem = new Item(ItemType.getItemTypes().get(itemTypes.getValue()).toString(), itemNameField.getText());
+            inventory.put(addedItem, 1); // adds one to the inventory
+            addItemPane.accept(addedItem, 1);
+        });
 
         GridPane addArea = new GridPane();
         addArea.setHgap(10);
         addArea.add(itemNameField, 0, 0);
+        addArea.add(itemTypes, 1, 0);
+        addArea.add(addButton, 2, 0);
 
         inputArea.add(addArea, 0, 5, 2, 1);
         
