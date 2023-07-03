@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -23,7 +25,7 @@ public class FoodPantry extends User implements Provider{
     private static final long serialVersionUID = -43412345566321L;
     private static final Logger logger = Logger.getLogger("FoodPantry");
 
-    private HashMap<Item, Integer> inventory = new HashMap<Item, Integer>();
+    private HashMap<Item, Integer> inventory = new HashMap<Item, Integer>(); //should never have two items with the same name
     private String name;
     private String details;
 
@@ -105,12 +107,24 @@ public class FoodPantry extends User implements Provider{
     
     /**
      * Uses the TextFields from the userFields Array and updates the values of the instance variables.
+     * If parse fails, check getUserFields().
      * @param userFields The ArrayList from the getUserFields method. Index 1 should be longitude and index 2 should be latitude.
      */
-    public void updateUserFields(ArrayList<Node> userFields) { // TODO testing; add the changes to database after this
+    public void updateUserFields(ArrayList<Node> userFields) {
         super.updateUserFields(userFields);
         setName(((TextField)userFields.get(3)).getText());
         setDetails(((TextField)userFields.get(4)).getText());
+        ((VBox)userFields.get(5)).getChildren().forEach(node ->{
+            BorderPane pane = (BorderPane)node;
+            int value = Integer.parseInt(((TextField)pane.getRight()).getText()); // value that the user interacted with
+
+            inventory.forEach((item, count) -> {
+                if(item.getItemName().equals(((Label)pane.getLeft()).getText())) {
+                    if(value == 0) inventory.remove(item);
+                    else inventory.put(item, value); // changes value in the system
+                }
+            });
+        });
         UserBase.serializeUsers();
     }
 
@@ -144,7 +158,9 @@ public class FoodPantry extends User implements Provider{
         inventoryBox.setPadding(new Insets(10));
         inventoryBox.setMaxWidth(240);
         inventoryBox.setPrefHeight(150);
-        inventory.forEach((item, integer) -> { //each item of inventory //TODO make the inventory editable
+
+        // adding the itempane
+        BiConsumer<Item, Integer> addItemPane = (item, integer) -> { //each item of inventory //TODO make the inventory editable
             BorderPane itemPane = new BorderPane();
             itemPane.setMinWidth(240);
 
@@ -153,13 +169,19 @@ public class FoodPantry extends User implements Provider{
 
             TextField countField = new TextField(integer.toString());
             countField.setPrefWidth(55);
-            itemPane.setRight(countField); // TODO make the integer editable later
+            itemPane.setRight(countField);
+            countField.textProperty().addListener((observable, oldValue, newValue) -> {// keeps the field only integers, and only up to 9 digits
+                if(!newValue.matches("^[\\d]{1,9}$")) 
+                    countField.setText(oldValue);
+            });
             
             BorderPane.setAlignment(itemName, Pos.CENTER_LEFT);//vertically centering the two
             BorderPane.setAlignment(countField, Pos.CENTER_RIGHT);
 
             inventoryBox.getChildren().add(itemPane);
-        }); //TODO to finish the inventory, make a text thing to add an item and an add button
+        };
+
+        inventory.forEach(addItemPane); //TODO to finish the inventory, make a text thing to add an item and an add button
         
         // making it a part of the grid
         ScrollPane inventoryPane = new ScrollPane(inventoryBox);
@@ -167,9 +189,23 @@ public class FoodPantry extends User implements Provider{
         inventoryPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
         inventoryPane.setPannable(true);
         inputArea.add(inventoryPane, 0, 4, 2, 1);
+
+        // interface to add a new entry to inventory
+        TextField itemNameField = new TextField();
+
+        ChoiceBox<String> itemTypes = new ChoiceBox<String>();
+		itemTypes.getItems().addAll(ItemType.getItemTypes()); //calling the account type recipient feels weird
+		itemTypes.setValue(ItemType.getItemTypes().get(0));
+
+        GridPane addArea = new GridPane();
+        addArea.setHgap(10);
+        addArea.add(itemNameField, 0, 0);
+
+        inputArea.add(addArea, 0, 5, 2, 1);
         
         userFields.add(nameField);
         userFields.add(detailsField);
+        userFields.add(inventoryBox);
 
         return userFields;
     }
