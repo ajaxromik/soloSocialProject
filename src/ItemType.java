@@ -11,7 +11,7 @@ public enum ItemType {
 
     /**
      * A list to return an app-usable list of the names of itemtypes.
-     * Must be updated with the addition of new ItemTypes.
+     * Must be updated with the addition of new ItemTypes. Cannot return an empty or null list.
      * @return A list of all the ItemTypes
      * @author William Carr
      */
