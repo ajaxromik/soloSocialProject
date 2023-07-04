@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "HomeFrame",
+            "request": "launch",
+            "mainClass": "HomeFrame",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
+            "name": "EditUserFrame",
+            "request": "launch",
+            "mainClass": "EditUserFrame",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
             "name": "ProviderDetailsFrame",
             "request": "launch",
             "mainClass": "ProviderDetailsFrame",
