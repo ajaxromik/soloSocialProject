@@ -43,11 +43,13 @@ public class GUIdriver extends Application{
         //permission-based home button listeners
         home.getSearchButton().setOnAction(e -> SearchFrame.buildSearchPage(mainStage));
         
+        // various back buttons
         Login_Frame.getBackButton().setOnAction(e -> { // the code in this button is how the screen returns to the home screen, and is called with a fire() method in Login_Frame
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
                 home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions()); // no matter what type of user, get the button permissions for them
 
                 home.getLoginButton().setText("Log out of: "+Login_Frame.getLoggedInUser().getUsername());
+                home.getEditButton().setOnAction(event -> EditUserFrame.createPage(mainStage, Login_Frame.getLoggedInUser())); // updates the home buttons
                 home.getLoginButton().setOnAction(event -> {Login_Frame.logout(); Login_Frame.buildLoginPage(mainStage, users);}); 
             } else { // how we change the home frame if we are not logged in
                 home.updatePermittedButtons(new HashSet<>());//sets HomeFrame's permissions to a new empty set
@@ -58,8 +60,10 @@ public class GUIdriver extends Application{
             mainStage.setScene(home.getScene());
         });
 
-        Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildCreatePage(mainStage));
         SearchFrame.getBackButton().setOnAction(e -> mainStage.setScene(home.getScene()));
+        EditUserFrame.getBackButton().setOnAction(e -> mainStage.setScene(home.getScene()));
+
+        Login_Frame.getCreateAccButton().setOnAction(e -> CreateUser_Frame.buildCreatePage(mainStage));
 
     }
 

@@ -28,7 +28,16 @@ public class EditUserFrame extends Application{
         launch(args);
     }
 
-    private static Button backButton;
+    /**
+     * Tests the program with a test foodpantry
+     */
+    public void start(Stage mainStage) {
+        // createPage(mainStage, new FoodPantry("testing", "pw", 30, 30, "bob's discount furniture", "bob sell furnies")); //TODO testing
+        createPage(mainStage, UserBase.users.get("theShop"));
+        // System.out.println(UserBase.users);
+    }
+
+    private static Button backButton = new Button("Back");
 
     /**
      * Returns the back button
@@ -36,14 +45,6 @@ public class EditUserFrame extends Application{
      */
     public static Button getBackButton() {
         return backButton;
-    }
-
-    /**
-     * Tests the program with a test foodpantry
-     */
-    public void start(Stage mainStage) {
-        // createPage(mainStage, new FoodPantry("testing", "pw", 30, 30, "bob's discount furniture", "bob sell furnies")); //TODO testing
-        createPage(mainStage, UserBase.users.get("theShop"));
     }
 
     /**
@@ -60,8 +61,6 @@ public class EditUserFrame extends Application{
         Label header = new Label("Edit User Information");
         header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
-        backButton = new Button("Back");
-
         // formatting
         BorderPane headPane = new BorderPane();
         headPane.setLeft(header);
@@ -73,8 +72,6 @@ public class EditUserFrame extends Application{
         Button submitButton = new Button("Submit");
         submitButton.setOnAction(e -> {
             user.updateUserFields(userFields);
-            // userFields.forEach(f -> System.out.println((f instanceof TextField) ? ""+Double.parseDouble(((TextField)f).getText()) : "not a textfield")); //TODO added for testing, remove when done
-            System.out.println(UserBase.users.get("theShop")); //TODO testing
             backButton.fire();
         });
         BorderPane submittalPane = new BorderPane();
