@@ -7,6 +7,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -26,11 +27,9 @@ import java.util.HashMap;
  */
 public class CreateUser_Frame extends Application {
 
-    private static final HashMap<String, User> USER_MAP = UserBase.users;
-
     // ----- testing methods -----
     public static void main(String[] args) {
-        System.out.println(UserBase.users);
+        System.out.println(USER_MAP);
         launch(args);
     }
 
@@ -46,10 +45,24 @@ public class CreateUser_Frame extends Application {
 
     // ----- end of testing methods -----
 
+    private static final HashMap<String, User> USER_MAP = UserBase.users;
+
     private static String userNameTxt;
     private static String pwTxt;
     private static int longitudeValue;
     private static int latitudeValue;
+    private static Button backButton = new Button("Back");
+    static {
+        BorderPane.setAlignment(backButton, Pos.CENTER_RIGHT);
+    }
+
+    /**
+     * Returns the back button
+     * @return The back button
+     */
+    public static Button getBackButton() {
+        return backButton;
+    }
 
     /**
      * Creates the Creation page.
@@ -59,14 +72,19 @@ public class CreateUser_Frame extends Application {
     public static void buildCreatePage(Stage primaryStage) {
         // Create the Create form
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
+        grid.setAlignment(Pos.TOP_CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
         Label sceneTitle = new Label("Create User Account");
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(sceneTitle, 0, 0, 2, 1);
+        BorderPane titlePane = new BorderPane();
+        titlePane.setLeft(sceneTitle);
+        titlePane.setRight(backButton);
+        BorderPane.setAlignment(sceneTitle, Pos.CENTER_LEFT);
+        
+        grid.add(titlePane, 0, 0, 2, 1);
 
         Label userName = new Label("User Name:");
         grid.add(userName, 0, 1);
@@ -110,13 +128,13 @@ public class CreateUser_Frame extends Application {
             latitudeValue = Integer.parseInt(latitudeField.getText());
         });
 
-        Button btn = new Button("Create");
-        grid.add(btn, 1, 6);
+        Button createButton = new Button("Create");
+        grid.add(createButton, 1, 6);
 
-        Label statusLbl = new Label();
-        grid.add(statusLbl, 1, 7);
+        Label statusLbl = new Label("\n ");//gets the first two lines so no resizing
+        grid.add(statusLbl, 0, 7, 2, 1);
 
-        btn.setOnAction(event -> {
+        createButton.setOnAction(event -> {
             try {
                 userNameTxt = userTextField.getText();
                 pwTxt = pwBox.getText();
@@ -137,6 +155,7 @@ public class CreateUser_Frame extends Application {
                 }
             } catch(UserAlreadyExistsException ex) {
                 statusLbl.setText("User already exists!\nYou could try '"+ex.getSuggestedUsername()+"' for a username.");
+                
                 return;
             } catch(Exception ex) {
                 ex.printStackTrace();
@@ -148,7 +167,7 @@ public class CreateUser_Frame extends Application {
 
         // Create the scene and set it on the stage
         Scene scene = new Scene(grid);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene);//TODO these lines exist in a lot of files but could be removed
         primaryStage.show();
     }
 
