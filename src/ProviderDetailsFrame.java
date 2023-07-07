@@ -1,10 +1,14 @@
 import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -56,6 +60,7 @@ public class ProviderDetailsFrame extends Application{
     private Provider provider;
     private Scene providerScene;
     private Button backButton = new Button("Back");
+    private GridPane donorVisiblePane = new GridPane();
 
     /**
      * Sets the logged in user
@@ -128,16 +133,45 @@ public class ProviderDetailsFrame extends Application{
         BorderPane topArea = new BorderPane();
         topArea.setPadding(new Insets(0, 0, 10, 0));
 
-        Button donateButton = new Button("Donate");
-        donateButton.setOnAction(e -> {
-            System.out.println("I donated from "+loggedInUser); //TODO finish later
-            
+        //setting up the donation area
+        ChoiceBox<String> itemTypes = new ChoiceBox<String>();
+		itemTypes.getItems().addAll(ItemType.getItemTypes().keySet()); //calling the account type recipient feels weird
+		itemTypes.setValue(ItemType.DEFAULT_ITEM_TYPE);
+        itemTypes.setPrefWidth(160);
+
+        TextField donateItemField = new TextField();
+        donateItemField.setPromptText("Name of Item");
+
+        TextField quantityField = new TextField();
+        quantityField.setPromptText("Count");
+        quantityField.setPrefWidth(60);
+        quantityField.textProperty().addListener((observable, oldValue, newValue) -> {// keeps 6 digits
+            if(!newValue.matches("^[\\d]{1,6}$"))
+                quantityField.setText(newValue.replaceAll("[^\\d.]",""));
         });
 
-        BorderPane buttonGrouping = new BorderPane();
-        buttonGrouping.setRight(backButton);
-        buttonGrouping.setCenter(donateButton);
-        topArea.setRight(buttonGrouping);
+        Button donateButton = new Button("Donate");
+        donateButton.setOnAction(e -> {
+            System.out.printf("I donated %d of %s that is type %s%n", quantityField.getText().isEmpty() ? 0 : Integer.parseInt(quantityField.getText()), donateItemField.getText(), ItemType.getItemTypes().get(itemTypes.getValue()).toString()); //TODO finish later
+            if(quantityField.getText().isEmpty() || Integer.parseInt(quantityField.getText()) == 0) { // do nothing case
+                System.out.println("Invalid");
+            }
+        });
+
+        GridPane interactiveGrid = new GridPane();
+        interactiveGrid.setHgap(5);
+
+        donorVisiblePane.setHgap(5); //sets up the donor's gridpane
+        donorVisiblePane.add(itemTypes, 0, 0);
+        donorVisiblePane.add(donateItemField, 1, 0);
+        donorVisiblePane.add(quantityField, 2, 0);
+        donorVisiblePane.add(donateButton, 3, 0);
+        donorVisiblePane.visibleProperty().set(true); //TODO leave false in final product
+
+        interactiveGrid.add(donorVisiblePane, 0, 0);
+        interactiveGrid.add(backButton, 1, 0);
+
+        topArea.setRight(interactiveGrid);
         topArea.setLeft(header);
 
         // putting it all together
@@ -149,5 +183,16 @@ public class ProviderDetailsFrame extends Application{
 
         providerScene = new Scene(providerPane, 1080, 550);
 
+    }
+
+    /**
+     * Updates the frame based on the user that is logged in.
+     * User must be set beforehand.
+     */
+    public void updateFrame() {
+        if(loggedInUser.canDonate()) // if users can donate, let them see the donation fields
+            donorVisiblePane.visibleProperty().set(true);
+        else // otherwise don't
+            donorVisiblePane.visibleProperty().set(false);
     }
 }
