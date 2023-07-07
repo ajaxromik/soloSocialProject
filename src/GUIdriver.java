@@ -48,9 +48,13 @@ public class GUIdriver extends Application{
             if(Login_Frame.isLoggedIn()){ //how to change the home frame if we are logged in
                 home.updatePermittedButtons(Login_Frame.getLoggedInUser().getButtonPermissions()); // no matter what type of user, get the button permissions for them
 
+                //edit button is able to not be reset because it would only matter if user is logged in again, in which case it would be reset
                 home.getLoginButton().setText("Log out of: "+Login_Frame.getLoggedInUser().getUsername());
                 home.getEditButton().setOnAction(event -> EditUserFrame.createPage(mainStage, Login_Frame.getLoggedInUser())); // updates the home buttons
                 home.getLoginButton().setOnAction(event -> {Login_Frame.logout(); Login_Frame.buildLoginPage(mainStage, users);}); 
+
+                //similar to edit button, the search button does not show unless logged in; therefore, we don't need to close it on logout
+                ProviderDetailsFrame.setLoggedInUser(Login_Frame.getLoggedInUser());
             } else { // how we change the home frame if we are not logged in
                 home.updatePermittedButtons(new HashSet<>());//sets HomeFrame's permissions to a new empty set
                 home.getLoginButton().setText("Login");//resets the text since it was modified

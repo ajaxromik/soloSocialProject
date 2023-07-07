@@ -51,9 +51,19 @@ public class ProviderDetailsFrame extends Application{
     }
 
     // ----- end of testing -----
-    private Provider provider; //TODO determine if this needs to actually be saved here
+
+    private static User loggedInUser;
+    private Provider provider;
     private Scene providerScene;
     private Button backButton = new Button("Back");
+
+    /**
+     * Sets the logged in user
+     * @param user The new logged in user
+     */
+    public static void setLoggedInUser(User user) {
+        loggedInUser = user;
+    }
 
     /**
      * Creates a frame for a provider. Must call setupControls when provider is changed.
@@ -90,7 +100,7 @@ public class ProviderDetailsFrame extends Application{
     public void setupControls() {
 
         // creates the header just like in the search frame
-        Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
+        Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLatitude(),provider.getLongitude()));
         header.setStyle("-fx-font-size: 24px;");
         
         //inventory items + details
@@ -111,11 +121,23 @@ public class ProviderDetailsFrame extends Application{
         WebEngine mapEngine = mapView.getEngine();
         mapEngine.load(String.format("https://maps.google.com/?ll=%f,%f&z=5",provider.getLatitude(),provider.getLongitude()));//somewhere in mexico
         mapView.setMaxSize(450, 500);
+        BorderPane borderedMap = new BorderPane(mapView);
+        borderedMap.setStyle("-fx-border-color: dimgray; -fx-border-width: 2px; -fx-border-radius: 3px;");
 
-        // Header and back button
+        // Header and buttons area
         BorderPane topArea = new BorderPane();
         topArea.setPadding(new Insets(0, 0, 10, 0));
-        topArea.setRight(backButton);
+
+        Button donateButton = new Button("Donate");
+        donateButton.setOnAction(e -> {
+            System.out.println("I donated from "+loggedInUser); //TODO finish later
+            
+        });
+
+        BorderPane buttonGrouping = new BorderPane();
+        buttonGrouping.setRight(backButton);
+        buttonGrouping.setCenter(donateButton);
+        topArea.setRight(buttonGrouping);
         topArea.setLeft(header);
 
         // putting it all together
@@ -123,7 +145,7 @@ public class ProviderDetailsFrame extends Application{
         providerPane.setPadding(new Insets(15));
         providerPane.setTop(topArea);
         providerPane.setLeft(description);
-        providerPane.setRight(mapView);
+        providerPane.setRight(borderedMap);
 
         providerScene = new Scene(providerPane, 1080, 550);
 
