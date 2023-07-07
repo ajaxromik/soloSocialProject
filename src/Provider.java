@@ -10,7 +10,7 @@ public interface Provider {
     abstract public HashMap<Item, Integer> getInventory();
     abstract public void setName(String name);
     abstract public void setDetails(String details);
-    abstract public boolean inInventory(ItemType itemType);
+    abstract public boolean inInventory(String itemName);
     abstract public void addToInventory(String itemType, String itemName, int quantity);
     abstract public void removeFromInventory(Item item);
     abstract public void setItemQuantity(Item item, int quantity);

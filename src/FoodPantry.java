@@ -242,23 +242,6 @@ public class FoodPantry extends User implements Provider{
     }
 
     /**
-     * checks if an item is in the inventory and they have at least one of it based off the type.
-     * @param itemType the type of item.
-     * @return true if the inventory has an item false if not.
-     * @author Julius A. Leone
-     */
-    public boolean inInventory(ItemType itemType){
-        for (Item item : inventory.keySet()) {
-            if(item.getItemType().equals(itemType) && inventory.get(item) != 0){
-                //if the item is in the inventory and has stock.
-                return true;
-            }
-        }
-        //if the loop successfully completes then the item was not found.
-        return false;
-    }
-
-    /**
      * adds an item to the inventory. If the inventory already contains the item the quantity goes up by one.
      * @param itemType the type of the item.
      * @param itemName the name of the item.
