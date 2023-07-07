@@ -28,6 +28,14 @@ public class Donor extends User{
     public void deleteDonation(Donation donation){
         donations.remove(donation);
     }
+
+    /**
+     * Returns whether a user can donate. By default returns false, but may be overrode by subclasses.
+     * @return This returns true for all donors.
+     */
+    public boolean canDonate() {
+        return true;
+    }
     
     /**
      * Returns the FoodPantry ButtonPermissions

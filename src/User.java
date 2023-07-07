@@ -71,6 +71,14 @@ abstract public class User implements Serializable{
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    /**
+     * Returns whether a user can donate. By default returns false, but may be overrode by subclasses.
+     * @return Whether the user is able to donate
+     */
+    public boolean canDonate() {
+        return false;
+    }
     
     /**
      * User toString method.
