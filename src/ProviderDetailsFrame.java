@@ -1,7 +1,7 @@
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -25,6 +25,7 @@ public class ProviderDetailsFrame extends Application{
     
     //TODO remove this
     private final Provider TESTING = UserBase.providers.values().iterator().next();//gets one of the providers from userbase in a disgusting way
+    private final Donor TESTING2 = UserBase.donors.values().iterator().next();//gets one of the providers from userbase in a disgusting way
 
     /**
      * Tests the class
@@ -51,6 +52,7 @@ public class ProviderDetailsFrame extends Application{
      */
     public ProviderDetailsFrame() {
         this.provider = TESTING;
+        loggedInUser = TESTING2;
         setupControls();
     }
 
@@ -61,6 +63,7 @@ public class ProviderDetailsFrame extends Application{
     private Scene providerScene;
     private Button backButton = new Button("Back");
     private GridPane donorVisiblePane = new GridPane();
+    private Text description;
 
     /**
      * Sets the logged in user
@@ -98,6 +101,28 @@ public class ProviderDetailsFrame extends Application{
     }
 
     /**
+     * Helper method to get the description text.
+     * @return The text for the description.
+     */
+    private String getDescriptionText() {
+        return "Inventory: "+
+               getInventoryText()+
+               "\n\n"+
+               provider.getDetails();
+    }
+
+    /**
+     * Helper method to get the inventory text.
+     * @return The text describing inventory contents of the provider.
+     */
+    private String getInventoryText() {
+        return (provider.getInventory().isEmpty() ? "Inventory items not listed" : // shows either prev String or items of the inventory
+            provider.getInventory().keySet().stream().map(
+                item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
+            ).collect(Collectors.toList())).toString();
+    }
+
+    /**
      * Creates the setup for the pane.
      * Does not need to update with changes to the provider, 
      * because a new instance of this class is created when being used.
@@ -109,15 +134,7 @@ public class ProviderDetailsFrame extends Application{
         header.setStyle("-fx-font-size: 24px;");
         
         //inventory items + details
-        Text description = new Text(
-            "Inventory: "+
-            (provider.getInventory().isEmpty() ? "Inventory items not listed" : // shows either the previous string of the items of the inventory
-            provider.getInventory().keySet().stream().map(
-                item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
-            ).collect(Collectors.toList()))+
-            "\n\n"+
-            provider.getDetails()
-        );
+        description = new Text(getDescriptionText());
         description.setWrappingWidth(600);
 
         // webview of the map, 
@@ -146,15 +163,44 @@ public class ProviderDetailsFrame extends Application{
         quantityField.setPromptText("Count");
         quantityField.setPrefWidth(60);
         quantityField.textProperty().addListener((observable, oldValue, newValue) -> {// keeps 6 digits
-            if(!newValue.matches("^[\\d]{1,6}$"))
-                quantityField.setText(newValue.replaceAll("[^\\d.]",""));
+            if(!newValue.matches("^[\\d]{0,6}$"))
+                quantityField.setText(oldValue);
         });
 
         Button donateButton = new Button("Donate");
         donateButton.setOnAction(e -> {
-            System.out.printf("I donated %d of %s that is type %s%n", quantityField.getText().isEmpty() ? 0 : Integer.parseInt(quantityField.getText()), donateItemField.getText(), ItemType.getItemTypes().get(itemTypes.getValue()).toString()); //TODO finish later
-            if(quantityField.getText().isEmpty() || Integer.parseInt(quantityField.getText()) == 0) { // do nothing case
-                System.out.println("Invalid");
+            if(!quantityField.getText().isEmpty() && Integer.parseInt(quantityField.getText()) != 0) { // only proceed with adding if the quantity is not 0 or empty
+                System.out.printf("----Before----%nInventory: %s%nDonor: %s%n%n", provider.getInventory().toString(), loggedInUser); // TODO remove when fully finished with testing
+
+                //definitions for readability
+                String itemName = donateItemField.getText();
+                ItemType itemType = ItemType.getItemTypes().get(itemTypes.getValue());
+                Integer quantity = Integer.parseInt(quantityField.getText());
+
+                //adding to inventory logic
+                if(provider.inInventory(itemName)){ // if in the inventory, get it and update the value
+                    Item currentItem = provider.getInventory()
+                                               .keySet()
+                                               .stream()
+                                               .filter(item -> item.getItemName().equalsIgnoreCase(itemName))
+                                               .findFirst().get();
+                    Integer currentAmt = provider.getInventory().get(currentItem);
+                    provider.getInventory().put(currentItem, (currentAmt + quantity));
+                } else { //add it if it's not already there
+                    provider.addToInventory(itemType.toString(), itemName, quantity);
+                }
+
+                //updating donor's records
+                Donor donor = (Donor)loggedInUser; //user can't use this unless is a kind of donor
+                donor.addDonation(LocalDate.now(), itemType, itemName, quantity);
+
+                //finalizes the changes into database
+                UserBase.serializeUsers();
+
+                //updates UI //TODO update searchframe?
+                description.setText(getDescriptionText());
+
+                System.out.printf("----After----%nInventory: %s%nDonor: %s%n%n", provider.getInventory().toString(), loggedInUser);
             }
         });
 
