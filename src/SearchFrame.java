@@ -140,11 +140,12 @@ public class SearchFrame extends Application{
                                 providerPane.setPadding(new Insets(15));
                                 providerPane.setMaxSize(940,250);
 
-                                Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLongitude(),provider.getLatitude()));
+                                Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLatitude(),provider.getLongitude()));
                                 Button seeMoreButton = new Button("See More");
 
                                 //sets up the provider's frame and the button for it
                                 ProviderDetailsFrame provFrame = new ProviderDetailsFrame(provider);
+                                provFrame.updateFrame();
                                 seeMoreButton.setOnAction(e -> mainStage.setScene(provFrame.getScene())); // see more goes to provider's frame
                                 provFrame.getBackButton().setOnAction(e -> mainStage.setScene(scene)); // back button goes to the scene param
 
