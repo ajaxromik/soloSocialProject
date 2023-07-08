@@ -91,7 +91,7 @@ abstract public class User implements Serializable{
         return "\nusername: "+username+
                "\npassword: "+password+
                "\nlongitude: "+longitude+
-               "\nlatitude: "+latitude;
+               "\nlatitude: "+latitude+"\n";
     }
 
     /**

@@ -101,9 +101,9 @@ public class FoodPantry extends User implements Provider{
     @Override
     public String toString() {
         return super.toString() +
-               "\ninventory: "+inventory+
+               "inventory: "+inventory+
                "\nname: "+name+
-               "\ndetails: "+details;
+               "\ndetails: "+details+"\n";
     }
     
     /**
