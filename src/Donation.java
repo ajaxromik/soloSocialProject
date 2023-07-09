@@ -1,19 +1,25 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 /**
  * Donations to providers from users.
  * @author Julius A. Leone
  * @version 4.19.2023
  */
-public class Donation implements Comparable<Donation>{
+public class Donation implements Comparable<Donation>, Serializable{
+    
+    private static final long serialVersionUID = -23759832054724L;
+
     private LocalDate date;
+    private Provider receivingProvider;
     private ItemType itemType;
-    private long donationAmount;
+    private String itemName;
     private int quantityOfItems;
 
-    public Donation(LocalDate date, ItemType itemType, long donationAmount, int quantityOfItems){
+    public Donation(LocalDate date, Provider receivingProvider, ItemType itemType, String itemName, int quantityOfItems){
         this.date = date;
+        this.receivingProvider = receivingProvider;
         this.itemType = itemType;
-        this.donationAmount = donationAmount;
+        this.itemName = itemName;
         this.quantityOfItems = quantityOfItems;
     }
 
@@ -26,13 +32,22 @@ public class Donation implements Comparable<Donation>{
         return this.itemType;
     }
 
-    public long getDonationAmount() {
-        return this.donationAmount;
+    public String getItemName() {
+        return this.itemName;
     }
 
 
     public int getQuantityOfItems() {
         return this.quantityOfItems;
+    }
+
+    /**
+     * Returns info about the donation
+     */
+    public String toString() {
+        return "\ndate: "+date+
+               "\nitem: "+itemName+
+               "\nquantity: "+quantityOfItems+"\n";
     }
 
     @Override

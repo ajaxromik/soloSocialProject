@@ -21,8 +21,8 @@ public class Donor extends User{
         return this.donations;
     }
     
-    public void addDonation(LocalDate date, ItemType itemType, long donationAmount, int quantityOfItems){
-        donations.add(new Donation(date, itemType, donationAmount, quantityOfItems));
+    public void addDonation(LocalDate date, Provider receivingProvider, ItemType itemType, String itemName, int quantityOfItems){
+        donations.add(new Donation(date, receivingProvider, itemType, itemName, quantityOfItems));
     }
 
     public void deleteDonation(Donation donation){
@@ -35,6 +35,14 @@ public class Donor extends User{
      */
     public boolean canDonate() {
         return true;
+    }
+
+    /**
+     * User toString method plus the donations.
+     */
+    public String toString() {
+        return super.toString() +
+               "donations: "+donations+"\n";
     }
     
     /**
