@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DonationView",
+            "request": "launch",
+            "mainClass": "DonationView",
+            "projectName": "SocialProject_7a912107"
+        },
+        {
+            "type": "java",
             "name": "HomeFrame",
             "request": "launch",
             "mainClass": "HomeFrame",
