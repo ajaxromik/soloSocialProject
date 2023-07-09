@@ -42,12 +42,21 @@ public class Donation implements Comparable<Donation>, Serializable{
     }
 
     /**
+     * Returns the receiving provider.
+     * @return The receiving provider.
+     */
+    public Provider getProvider() {
+        return receivingProvider;
+    }
+
+    /**
      * Returns info about the donation
      */
     public String toString() {
         return "\ndate: "+date+
                "\nitem: "+itemName+
-               "\nquantity: "+quantityOfItems+"\n";
+               "\nquantity: "+quantityOfItems+
+               "\nreceiver: "+receivingProvider.getUsername()+"\n";
     }
 
     @Override
