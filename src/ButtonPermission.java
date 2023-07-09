@@ -3,6 +3,6 @@
  * @author William Carr
  */
 public enum ButtonPermission {
-    DONATE,
+    VIEWDONATIONS,
     EDIT
 }
