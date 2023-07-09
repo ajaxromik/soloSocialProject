@@ -19,6 +19,28 @@ abstract public class User implements Serializable{
     
     private static final long serialVersionUID = -43412345566322L;
 
+    // since there is no reason for a set, keep this public just like Integer.MAX_VALUE
+    public static final double MAX_LATITUDE = 90.0;
+    public static final double MIN_LATITUDE = -90.0;
+    public static final double MAX_LONGITUDE = 180.0;
+    public static final double MIN_LONGITUDE = -180.0;
+
+    /**
+     * Checks two doubles to see if they are within the ranges allowed for latitude and longitude.
+     * @param latitude The latitude to check
+     * @param longitude The longitude to check
+     * @return Whether the latitude or longitude are valid.
+     */
+    public static boolean checkLatLon(double latitude, double longitude) {
+        if(latitude > MAX_LATITUDE ||
+           latitude < MIN_LATITUDE ||
+           longitude > MAX_LONGITUDE ||
+           longitude < MIN_LONGITUDE)
+            return false;
+        else
+            return true;
+    }
+
     private String username;
     private String password;
     private double longitude;
