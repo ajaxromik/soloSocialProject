@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 /**
  * This Class is the login frame of our appliaction. This is where the user will enter in their login and password 
@@ -166,6 +164,10 @@ public class Login_Frame extends Application{
 
         
         Scene scene = new Scene(borderPane, 400, 400);
+
+        createAccButton.setOnAction(e -> CreateUser_Frame.buildCreatePage(primaryStage));
+        CreateUser_Frame.getBackButton().setOnAction(e -> primaryStage.setScene(scene));
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
