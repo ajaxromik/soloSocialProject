@@ -139,20 +139,9 @@ abstract public class User implements Serializable{
         inputArea.setVgap(10);
         inputArea.setPadding(new Insets(25));
         
-        // basic user details //TODO consider adding password changing
-        Label longitudeLabel = new Label("Longitude:");
-        inputArea.add(longitudeLabel, 0, 0);
-
-        TextField longitudeField = new TextField(); //TODO make the create user frame lambda for changing the long & lat into a static var to use here too
-        longitudeField.setText(""+this.longitude);
-        longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
-                longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
-        });
-        inputArea.add(longitudeField, 1, 0);
-
+        // basic user details; can't edit password
         Label latitudeLabel = new Label("Latitude:");
-        inputArea.add(latitudeLabel, 0, 1);
+        inputArea.add(latitudeLabel, 0, 0);
 
         TextField latitudeField = new TextField();
         latitudeField.setText(""+this.latitude);
@@ -160,7 +149,18 @@ abstract public class User implements Serializable{
             if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
                 latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
         });
-        inputArea.add(latitudeField, 1, 1);
+        inputArea.add(latitudeField, 1, 0);
+
+        Label longitudeLabel = new Label("Longitude:");
+        inputArea.add(longitudeLabel, 0, 1);
+
+        TextField longitudeField = new TextField(); //TODO make the create user frame lambda for changing the long & lat into a static var to use here too
+        longitudeField.setText(""+this.longitude);
+        longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
+                longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+        });
+        inputArea.add(longitudeField, 1, 1);
         
         ArrayList<Node> userFields = new ArrayList<Node>();
         userFields.add(inputArea);
