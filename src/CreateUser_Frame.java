@@ -49,8 +49,8 @@ public class CreateUser_Frame extends Application {
 
     private static String userNameTxt;
     private static String pwTxt;
-    private static int longitudeValue;
-    private static int latitudeValue;
+    private static double longitudeValue;
+    private static double latitudeValue;
     private static Button backButton = new Button("Back");
     static {
         BorderPane.setAlignment(backButton, Pos.CENTER_RIGHT);
@@ -104,28 +104,38 @@ public class CreateUser_Frame extends Application {
         PasswordField pwBox2 = new PasswordField();
         grid.add(pwBox2, 1, 3);
 
-        Label longitude = new Label("Longitude:");
-        grid.add(longitude, 0, 4);
-
-        TextField longitudeField = new TextField();
-        grid.add(longitudeField, 1, 4);
-
         Label latitude = new Label("Latitude:");
-        grid.add(latitude, 0, 5);
+        grid.add(latitude, 0, 4);
 
         TextField latitudeField = new TextField();
-        grid.add(latitudeField, 1, 5);
+        grid.add(latitudeField, 1, 4);
+
+        Label longitude = new Label("Longitude:");
+        grid.add(longitude, 0, 5);
+
+        TextField longitudeField = new TextField();
+        grid.add(longitudeField, 1, 5);
 
         //Only allows numbers into the longitude and latitude, and sets the static variables
+        latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$") || newValue.length() > 12) //TODO it's a little finicky for negatives
+                latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+            
+            if(newValue.length() > 12)// shorten if the string is too long. No number will need more accuracy than the 8th digit after the decimal, we do not deal with numbers in the hundreds for latitude, plus room for a decimal place and minus
+                latitudeField.setText(latitudeField.getText().substring(0, 12));
+            
+            if(!latitudeField.getText().isEmpty()) // only change latitudeValue if it has a number
+                latitudeValue = Double.parseDouble(latitudeField.getText());
+        });
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
                 longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
-            longitudeValue = Integer.parseInt(longitudeField.getText());
-        });
-        latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
-                latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
-            latitudeValue = Integer.parseInt(latitudeField.getText());
+            
+            if(newValue.length() > 13)// shorten if the string is too long. No number will need more accuracy than the 8th digit after the decimal, and we do not deal with numbers in the thousands, plus room for a decimal place and minus
+                longitudeField.setText(longitudeField.getText().substring(0, 13));
+
+            if(!longitudeField.getText().isEmpty()) // only change longitudeValue if it has a number
+                longitudeValue = Double.parseDouble(longitudeField.getText());// try to save the number
         });
 
         Button createButton = new Button("Create");
@@ -139,6 +149,15 @@ public class CreateUser_Frame extends Application {
                 userNameTxt = userTextField.getText();
                 pwTxt = pwBox.getText();
                 String pwTxt2 = pwBox2.getText();
+                
+                boolean longitudeEmpty = longitudeField.textProperty().getValue().isEmpty();
+                boolean latitudeEmpty = latitudeField.textProperty().getValue().isEmpty();
+                
+                if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")
+                    || longitudeEmpty || latitudeEmpty) {
+                    statusLbl.setText("Fields can not be blank!");
+                    return;
+                }
 
                 if (!pwTxt.equals(pwTxt2)) {
                     statusLbl.setText("Passwords do not match!");
@@ -148,14 +167,14 @@ public class CreateUser_Frame extends Application {
                 if (USER_MAP.containsKey(userNameTxt)) {
                     throw new UserAlreadyExistsException(userNameTxt);
                 }
-                
-                if (userNameTxt.equals("") || pwTxt.equals("") || pwTxt2.equals("")) {
-                    statusLbl.setText("Fields can not be blank!");
+
+                if(!User.checkLatLon(latitudeValue, longitudeValue)) { //the previous if statement would have been called if either the latitude or longitude were empty, so we call this method to make sure they are within the valid range
+                    statusLbl.setText("Latitude must be between -90 and 90.\nLongitude must be between -180 and 180.");
                     return;
                 }
+
             } catch(UserAlreadyExistsException ex) {
                 statusLbl.setText("User already exists!\nYou could try '"+ex.getSuggestedUsername()+"' for a username.");
-                
                 return;
             } catch(Exception ex) {
                 ex.printStackTrace();
