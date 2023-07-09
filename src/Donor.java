@@ -53,7 +53,7 @@ public class Donor extends User{
      */
     public Set<ButtonPermission> getButtonPermissions() {
         HashSet<ButtonPermission> perms = new HashSet<>(super.getButtonPermissions());
-        perms.add(ButtonPermission.DONATE);
+        perms.add(ButtonPermission.VIEWDONATIONS);
         return perms;
     }
 

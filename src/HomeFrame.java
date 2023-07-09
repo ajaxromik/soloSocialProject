@@ -67,7 +67,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     private HBox permittedButtons;
     private Set<ButtonPermission> perms = new HashSet<>(); //by default user has no permissions
     private Button searchButton = new Button("Search");
-    private Button donateButton = new Button("Donate");
+    private Button viewDonationsButton = new Button("View Donations");
     private Button editButton = new Button("Edit Location Info");
 
     private final int SUMMARY_WIDTH = 600;
@@ -133,13 +133,13 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     }
 
     /**
-     * Returns the donateButton
+     * Returns the viewDonationsButton
      * 
      * @author William Carr
-     * @return donateButton field
+     * @return viewDonationsButton field
      */
-    public Button getDonateButton() {
-        return donateButton;
+    public Button getViewDonationsButton() {
+        return viewDonationsButton;
     }
 
     /**
@@ -172,8 +172,8 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
                     case EDIT:
                         children.add(editButton);
                         break;
-                    case DONATE:
-                        children.add(donateButton);
+                    case VIEWDONATIONS:
+                        children.add(viewDonationsButton);
                         break;
                 }
             }
