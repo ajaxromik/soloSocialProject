@@ -32,10 +32,10 @@ abstract public class User implements Serializable{
      * @return Whether the latitude or longitude are valid.
      */
     public static boolean checkLatLon(double latitude, double longitude) {
-        if(latitude > MAX_LATITUDE ||
-           latitude < MIN_LATITUDE ||
-           longitude > MAX_LONGITUDE ||
-           longitude < MIN_LONGITUDE)
+        if(latitude >= MAX_LATITUDE ||
+           latitude <= MIN_LATITUDE ||
+           longitude >= MAX_LONGITUDE ||
+           longitude <= MIN_LONGITUDE)
             return false;
         else
             return true;
