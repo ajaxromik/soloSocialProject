@@ -15,12 +15,21 @@ public class Donation implements Comparable<Donation>, Serializable{
     private String itemName;
     private int quantityOfItems;
 
+    /**
+     * Creates a new donation and adds it to the record. 
+     * @param date
+     * @param receivingProvider
+     * @param itemType
+     * @param itemName
+     * @param quantityOfItems
+     */
     public Donation(LocalDate date, Provider receivingProvider, ItemType itemType, String itemName, int quantityOfItems){
         this.date = date;
         this.receivingProvider = receivingProvider;
         this.itemType = itemType;
         this.itemName = itemName;
         this.quantityOfItems = quantityOfItems;
+        DonationFeed.recordDonation(this);
     }
 
 
