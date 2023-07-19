@@ -48,7 +48,7 @@ public class DonationsBase {
      */
     public static void recordDonation(Donation donation) {
         if(donation != null) {
-            recentDonations.add(donation); // new donations are added
+            recentDonations.add(0, donation); // new donations are added
             
             if(recentDonations.size() > DONATION_LIMIT) 
                 recentDonations.remove(DONATION_LIMIT); // remove the last one if the list just got bigger than the limit
