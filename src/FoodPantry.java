@@ -112,7 +112,6 @@ public class FoodPantry extends User implements Provider{
      * @param userFields The ArrayList from the getUserFields method. Index 1 should be longitude and index 2 should be latitude.
      */
     public void updateUserFields(ArrayList<Node> userFields) {
-        super.updateUserFields(userFields);
         setName(((TextField)userFields.get(3)).getText());
         setDetails(((TextField)userFields.get(4)).getText());
         
@@ -129,7 +128,7 @@ public class FoodPantry extends User implements Provider{
         });
         inventory = tempMap;
 
-        UserBase.serializeUsers();
+        super.updateUserFields(userFields);
     }
 
     /**

@@ -117,13 +117,28 @@ abstract public class User implements Serializable{
     }
 
     /**
+     * Validates the userfields to make sure that they are ready to be submitted.
+     * @param userFields The userfields from getUserFields()
+     * @return Whether or not the user fields are valid.
+     */
+    public boolean validateUserFields(ArrayList<Node> userFields) {
+        try {// try/catch in case not proper numbers
+            double longitude = Double.parseDouble(((TextField)userFields.get(1)).getText());
+            double latitude = Double.parseDouble(((TextField)userFields.get(2)).getText());
+            return checkLatLon(latitude, longitude); //checklatlon for valid values
+        } catch(NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    /**
      * Uses the TextFields from the userFields Array and updates the values of the instance variables.
+     * MUST use validateUserFields() first.
      * @param userFields The ArrayList from the getUserFields method. Index 1 should be longitude and index 2 should be latitude.
      */
     public void updateUserFields(ArrayList<Node> userFields) { // TODO testing; add the changes to database after this
         setLongitude(Double.parseDouble(((TextField)userFields.get(1)).getText()));
         setLatitude(Double.parseDouble(((TextField)userFields.get(2)).getText()));
-        UserBase.serializeUsers();
     }
 
     /** //TODO needs a function that takes the ArrayList and updates the user fields
@@ -146,19 +161,25 @@ abstract public class User implements Serializable{
         TextField latitudeField = new TextField();
         latitudeField.setText(""+this.latitude);
         latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
-                latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+            if(!newValue.matches("[\\d.-]"))
+                latitudeField.setText(newValue.replaceAll("[^\\d.-]|(?<!^)[-]",""));
+            
+            if(newValue.length() > 12)
+                latitudeField.setText(latitudeField.getText().substring(0, 12));
         });
         inputArea.add(latitudeField, 1, 0);
 
         Label longitudeLabel = new Label("Longitude:");
         inputArea.add(longitudeLabel, 0, 1);
 
-        TextField longitudeField = new TextField(); //TODO make the create user frame lambda for changing the long & lat into a static var to use here too
+        TextField longitudeField = new TextField();
         longitudeField.setText(""+this.longitude);
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
-                longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+            if(!newValue.matches("[\\d.-]")) 
+                longitudeField.setText(newValue.replaceAll("[^\\d.-]|(?<!^)[-]",""));
+            
+            if(newValue.length() > 13)
+                longitudeField.setText(longitudeField.getText().substring(0, 13));
         });
         inputArea.add(longitudeField, 1, 1);
         
