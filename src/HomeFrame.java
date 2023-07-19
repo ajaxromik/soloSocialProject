@@ -1,5 +1,6 @@
 import java.util.Set;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.HashSet;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -72,6 +73,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
 
     private final int SUMMARY_WIDTH = 600;
     private final String BULLETPOINT = "\u2022";
+    private static final int INTERVALS_UNTIL_FEED_STOP = 8640;  // a full day has 8640 individual 10-second intervals
 
     /**
      * Creates a HomeFrame Object to store the homeScene and adds it to a stage
@@ -227,9 +229,10 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         Text recentDonationsHeader = new Text("Recent Donations");
         recentDonationsHeader.setFont(new Font(17.5));
 
-        recentDonationsFeed = new VBox();
+        recentDonationsFeed = new VBox(); //TODO implement the additions to the VBox here
         recentDonationsFeed.setBackground(new Background(new BackgroundFill(Color.DARKTURQUOISE, new CornerRadii(5), new Insets(5))));
         recentDonationsFeed.setMinSize(200, 200);
+        startFeed();
 
         BorderPane recentDonationsContainer = new BorderPane();
         recentDonationsContainer.setTop(recentDonationsHeader);
@@ -251,6 +254,65 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         mainPane.add(recentDonationsContainer, 1, 1);
 
         homeScene = new Scene(mainPane);
+    }
+
+    /**
+     * Gets the text to use to display a donation in the feed.
+     * @param donation The donation to convert to text.
+     * @return The String version of the donation.
+     */
+    private static String getDonationText(Donation donation) {
+        return String.format("%i %s(s) to %s", donation.getQuantityOfItems(), donation.getItemName(), donation.getProvider().getName());
+    }
+
+    /**
+     * Updates the donations VBox feed based on the newly made donations.
+     */
+    private void updateFeedOnce() {
+        recentDonationsFeed.getChildren().clear();
+        
+        ArrayList<Donation> displayedDonations = DonationsBase.getRecentDonations();
+
+        String foundation = "";
+        for(int i = 0; i < displayedDonations.size(); i++) {
+            if(i != 0) //separate this line from the one before if it's not the first
+                foundation += "\n";
+            foundation += getDonationText(displayedDonations.get(i));
+        }
+
+        recentDonationsFeed.getChildren().add(new Text(foundation));
+    }
+
+    /**
+     * Updates the donations VBox feed indefinitely.
+     */
+    private void updateFeedIndefinitely() {
+        try {
+            for (int i = 0; i < HomeFrame.INTERVALS_UNTIL_FEED_STOP; i++) {
+                updateFeedOnce();
+                Thread.sleep(10000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Uses the recentDonationsFeed instance variable to set the feed running.
+     */
+    private void startFeed() {
+
+        // starts the automatically updating feed
+        Runnable updater = new Runnable() {
+            public void run() {
+                updateFeedIndefinitely();
+            }
+        };
+
+        Thread backgroundUpdater = new Thread(updater);
+        backgroundUpdater.setDaemon(true);
+        backgroundUpdater.start(); // tells the application to start the updater
+        
     }
 
 }
