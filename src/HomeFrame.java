@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -231,7 +232,10 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
 
         recentDonationsFeed = new VBox(); //TODO implement the additions to the VBox here
         recentDonationsFeed.setBackground(new Background(new BackgroundFill(Color.DARKTURQUOISE, new CornerRadii(5), new Insets(5))));
-        recentDonationsFeed.setMinSize(200, 200);
+        recentDonationsFeed.setMinSize(275, 220);
+        recentDonationsFeed.setPadding(new Insets(10));
+        recentDonationsFeed.setSpacing(2);
+        recentDonationsFeed.setAlignment(Pos.TOP_CENTER);
         startFeed();
 
         BorderPane recentDonationsContainer = new BorderPane();
@@ -262,25 +266,29 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
      * @return The String version of the donation.
      */
     private static String getDonationText(Donation donation) {
-        return String.format("%i %s(s) to %s", donation.getQuantityOfItems(), donation.getItemName(), donation.getProvider().getName());
+        return String.format("%d %s(s) to %s", donation.getQuantityOfItems(), donation.getItemName(), donation.getProvider().getName());
     }
 
     /**
      * Updates the donations VBox feed based on the newly made donations.
      */
     private void updateFeedOnce() {
-        recentDonationsFeed.getChildren().clear();
-        
-        ArrayList<Donation> displayedDonations = DonationsBase.getRecentDonations();
 
-        String foundation = "";
-        for(int i = 0; i < displayedDonations.size(); i++) {
-            if(i != 0) //separate this line from the one before if it's not the first
-                foundation += "\n";
-            foundation += getDonationText(displayedDonations.get(i));
-        }
+        Platform.runLater(new Runnable() {// this has to be in a platform runlater otherwise we get an error
+            @Override
+            public void run() {
+                recentDonationsFeed.getChildren().clear();
+                
+                ArrayList<Donation> displayedDonations = DonationsBase.getRecentDonations();
 
-        recentDonationsFeed.getChildren().add(new Text(foundation));
+                displayedDonations.forEach(donation -> {
+                    Text displayText = new Text(getDonationText(donation));
+                    displayText.setFont(new Font(16.5));
+                    recentDonationsFeed.getChildren().add(displayText);
+                });
+            }
+        });
+
     }
 
     /**
@@ -298,7 +306,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
     }
 
     /**
-     * Uses the recentDonationsFeed instance variable to set the feed running.
+     * Uses the recentDonationsFeed instance variable to set the feed running on its own thread.
      */
     private void startFeed() {
 
