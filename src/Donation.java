@@ -29,7 +29,7 @@ public class Donation implements Comparable<Donation>, Serializable{
         this.itemType = itemType;
         this.itemName = itemName;
         this.quantityOfItems = quantityOfItems;
-        DonationFeed.recordDonation(this);
+        DonationsBase.recordDonation(this);
     }
 
 
