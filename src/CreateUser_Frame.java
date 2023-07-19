@@ -14,8 +14,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import java.util.HashMap;
 
-//TODO: Fix when nothing in username or password it dose not create a new user! 
-
 /**
  * The CreateUser_Frame will creates a create page with fields for the user's 
  * name, password and re-entered password. Upon clicking the "Create" button,
@@ -118,24 +116,18 @@ public class CreateUser_Frame extends Application {
 
         //Only allows numbers into the longitude and latitude, and sets the static variables
         latitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$") || newValue.length() > 12) //TODO it's a little finicky for negatives
-                latitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+            if(!newValue.matches("[\\d.-]")) //TODO leave setting the variable for later
+                latitudeField.setText(newValue.replaceAll("[^\\d.-]|(?<!^)[-]",""));
             
             if(newValue.length() > 12)// shorten if the string is too long. No number will need more accuracy than the 8th digit after the decimal, we do not deal with numbers in the hundreds for latitude, plus room for a decimal place and minus
                 latitudeField.setText(latitudeField.getText().substring(0, 12));
-            
-            if(!latitudeField.getText().isEmpty()) // only change latitudeValue if it has a number
-                latitudeValue = Double.parseDouble(latitudeField.getText());
         });
         longitudeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue.matches("^[-]?[0-9]+\\.?[0-9]*$")) 
-                longitudeField.setText(newValue.replaceAll("[^\\d.]|[.](?=.*[.]+)",""));
+            if(!newValue.matches("[\\d.-]")) 
+                longitudeField.setText(newValue.replaceAll("[^\\d.-]|(?<!^)[-]",""));
             
             if(newValue.length() > 13)// shorten if the string is too long. No number will need more accuracy than the 8th digit after the decimal, and we do not deal with numbers in the thousands, plus room for a decimal place and minus
                 longitudeField.setText(longitudeField.getText().substring(0, 13));
-
-            if(!longitudeField.getText().isEmpty()) // only change longitudeValue if it has a number
-                longitudeValue = Double.parseDouble(longitudeField.getText());// try to save the number
         });
 
         Button createButton = new Button("Create");
@@ -159,6 +151,9 @@ public class CreateUser_Frame extends Application {
                     return;
                 }
 
+                longitudeValue = Double.parseDouble(longitudeField.getText());
+                latitudeValue = Double.parseDouble(latitudeField.getText());
+
                 if (!pwTxt.equals(pwTxt2)) {
                     statusLbl.setText("Passwords do not match!");
                     return;
@@ -175,6 +170,9 @@ public class CreateUser_Frame extends Application {
 
             } catch(UserAlreadyExistsException ex) {
                 statusLbl.setText("User already exists!\nYou could try '"+ex.getSuggestedUsername()+"' for a username.");
+                return;
+            } catch(NumberFormatException ex) {
+                statusLbl.setText("Latitude or longitude input is invalid.\nMake sure that they are valid numbers.");
                 return;
             } catch(Exception ex) {
                 ex.printStackTrace();

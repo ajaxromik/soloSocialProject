@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ public class EditUserFrame extends Application{
      * @param args Arguments of the program
      */
     public static void main(String[] args) {
+        backButton.setOnAction(e -> System.out.println("back"));
         launch(args);
     }
 
@@ -35,6 +37,7 @@ public class EditUserFrame extends Application{
         // createPage(mainStage, new FoodPantry("testing", "pw", 30, 30, "bob's discount furniture", "bob sell furnies")); //TODO testing
         createPage(mainStage, UserBase.users.get("theShop"));
         // System.out.println(UserBase.users);
+        mainStage.show();
     }
 
     private static Button backButton = new Button("Back");
@@ -68,14 +71,24 @@ public class EditUserFrame extends Application{
         BorderPane backPane = new BorderPane();
         backPane.setRight(backButton);
 
+        // input validation message
+        Label status = new Label("\n ");
+        BorderPane.setAlignment(status, Pos.CENTER_LEFT);
+
         // submit button/area
         Button submitButton = new Button("Submit");
         submitButton.setOnAction(e -> {
-            user.updateUserFields(userFields);
-            backButton.fire();
+            if(user.validateUserFields(userFields)){// if the userfields are valid, use them to update
+                user.updateUserFields(userFields);
+                UserBase.serializeUsers();
+                backButton.fire();
+            } else {
+                status.setText("Latitude or longitude input is invalid.\nMake sure that they are valid numbers.");
+            }
         });
         BorderPane submittalPane = new BorderPane();
         submittalPane.setRight(submitButton);
+        submittalPane.setLeft(status);
 
         //final setup
         GridPane mainPane = new GridPane();
@@ -87,11 +100,10 @@ public class EditUserFrame extends Application{
 
         mainPane.add(userFields.get(0), 0, 1, 2, 1); // makes input area centered
 
-        mainPane.add(submittalPane, 1, 2);
+        mainPane.add(submittalPane, 0, 2, 2, 1);
 
         Scene finalScene = new Scene(mainPane);
         mainStage.setScene(finalScene);
-        mainStage.show();
     }
 
 }
