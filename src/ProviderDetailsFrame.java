@@ -191,7 +191,9 @@ public class ProviderDetailsFrame extends Application{
 
                 //updating donor's records
                 Donor donor = (Donor)loggedInUser; //user can't use this unless is a kind of donor
-                donor.addDonation(LocalDate.now(), provider, itemType, itemName, quantity);
+                Donation donation = new Donation(LocalDate.now(), provider, itemType, itemName, quantity);
+                donor.addDonation(donation);
+                DonationsBase.recordDonation(donation);
 
                 //finalizes the changes into database
                 UserBase.serializeUsers();
