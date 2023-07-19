@@ -170,7 +170,6 @@ public class SearchFrame extends Application{
      * @param keyword The contents of the search bar, regardless of how many words it is
      */
     private static void searchUsers(VBox destination, String filter, String keyword){
-        System.out.printf("searched for \"%2$s\" with \"%1$s\" filter%n",filter,keyword);//TODO remove this
         destination.getChildren().clear();
         Searcher.getDefault(filter)
                 .searchProviders(new ArrayList<Provider>(UserBase.providers.values()), keyword)

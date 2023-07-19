@@ -170,7 +170,6 @@ public class ProviderDetailsFrame extends Application{
         Button donateButton = new Button("Donate");
         donateButton.setOnAction(e -> {
             if(!quantityField.getText().isEmpty() && Integer.parseInt(quantityField.getText()) != 0) { // only proceed with adding if the quantity is not 0 or empty
-                System.out.printf("----Before----%nInventory: %s%nDonor: %s%n%n", provider.getInventory().toString(), loggedInUser); // TODO remove when fully finished with testing
 
                 //definitions for readability
                 String itemName = donateItemField.getText();
@@ -199,8 +198,6 @@ public class ProviderDetailsFrame extends Application{
 
                 //updates UI //TODO update searchframe?
                 description.setText(getDescriptionText());
-
-                System.out.printf("----After----%nInventory: %s%nDonor: %s%n%n", provider.getInventory().toString(), loggedInUser);
             }
         });
 
