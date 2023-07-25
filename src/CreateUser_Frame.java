@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -224,7 +225,7 @@ public class CreateUser_Frame extends Application {
         
         //creates the fields outside of the listener so that we can access them
         TextField nameField = new TextField();
-        TextField detailsField = new TextField();
+        TextArea detailsField = new TextArea();
 
         // listeners
         submit.setOnAction(e -> submitRecipient()); // default because of standard user being default
@@ -269,8 +270,8 @@ public class CreateUser_Frame extends Application {
         FoodPantry newFoodPantry = new FoodPantry(userNameTxt, pwTxt, longitudeValue, latitudeValue, name, details);
         UserBase.foodPantrys.put(newFoodPantry.getUsername(), newFoodPantry);
         UserBase.serializeFoodPantrys();
-
         //makes sure that the app is updated in all necessary areas
+        UserBase.providers.put(newFoodPantry.getUsername(), newFoodPantry);
         UserBase.users.put(newFoodPantry.getUsername(), newFoodPantry);
         GUIdriver.addUser(newFoodPantry);
 
@@ -303,7 +304,7 @@ public class CreateUser_Frame extends Application {
         UserBase.recipients.put(newRecipient.getUsername(), newRecipient);
         UserBase.serializeRecipients();
         UserBase.users.put(newRecipient.getUsername(), newRecipient); // needed so that the app can use the new user without closing the app and starting it up again
-        GUIdriver.addUser(newRecipient);
+        GUIdriver.addUser(newRecipient); 
         Login_Frame.getBackButton().fire();
     }
 

@@ -42,6 +42,7 @@ public class SearchFrame extends Application{
     @Override
     public void start(Stage mainStage) {
         buildSearchPage(mainStage);
+		mainStage.show();
     }
 
     // ----- end of testing methods -----
@@ -117,7 +118,19 @@ public class SearchFrame extends Application{
         resultsBox.getChildren().addAll(providerPanes.values()); // below the scene creation because waiting for "updateProviderPanes"
 
 		mainStage.setScene(searchScene);
-		mainStage.show();
+    }
+
+    /**
+     * Gets the text that will display the inventory for the provider in SearchFrame. Used to keep code DRY.
+     * 
+     * @param provider The provider to base the inventory off of.
+     * @return A string that displays the inventory.
+     */
+    private static String getProviderSearchInventory(Provider provider) {
+        return provider.getDetails()+"\n"
+               +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet().stream().map(
+                   item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
+               ).collect(Collectors.toList()));
     }
 
     /**
@@ -143,17 +156,17 @@ public class SearchFrame extends Application{
                                 Label header = new Label(String.format("%s (%.6f, %.6f)",provider.getName(),provider.getLatitude(),provider.getLongitude()));
                                 Button seeMoreButton = new Button("See More");
 
+                                Text details = new Text(getProviderSearchInventory(provider));// details and inventory, if it's not empty
+                                details.setWrappingWidth(925);
+
                                 //sets up the provider's frame and the button for it
                                 ProviderDetailsFrame provFrame = new ProviderDetailsFrame(provider);
                                 provFrame.updateFrame();
                                 seeMoreButton.setOnAction(e -> mainStage.setScene(provFrame.getScene())); // see more goes to provider's frame
-                                provFrame.getBackButton().setOnAction(e -> mainStage.setScene(scene)); // back button goes to the scene param
-
-                                Text details = new Text(provider.getDetails()+"\n"
-                                +(provider.getInventory().isEmpty() ? "" : provider.getInventory().keySet().stream().map(
-                                    item -> String.format("%s: %d", item.getItemName(),provider.getInventory().get(item))
-                                ).collect(Collectors.toList())));// details and inventory, if it's not empty
-                                details.setWrappingWidth(925);
+                                provFrame.getBackButton().setOnAction(e -> {
+                                    details.setText(getProviderSearchInventory(provider));
+                                    mainStage.setScene(scene);
+                                }); // back button goes to the scene param
 
                                 providerPane.setLeft(header);
                                 providerPane.setRight(seeMoreButton);

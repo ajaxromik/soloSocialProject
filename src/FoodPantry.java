@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -10,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -113,7 +113,7 @@ public class FoodPantry extends User implements Provider{
      */
     public void updateUserFields(ArrayList<Node> userFields) {
         setName(((TextField)userFields.get(3)).getText());
-        setDetails(((TextField)userFields.get(4)).getText());
+        setDetails(((TextArea)userFields.get(4)).getText());
         
         HashMap<Item,Integer> tempMap = new HashMap<Item,Integer>();
         ((VBox)userFields.get(5)).getChildren().forEach(node ->{
@@ -152,7 +152,7 @@ public class FoodPantry extends User implements Provider{
         Label detailsLabel = new Label("Details:");
         inputArea.add(detailsLabel, 0, 3);
 
-        TextField detailsField = new TextField(); //TODO make this into a bigger box
+        TextArea detailsField = new TextArea(); //TODO make this into a bigger box
         detailsField.setText(""+this.details);
         inputArea.add(detailsField, 1, 3);
 
