@@ -61,35 +61,66 @@ abstract public class User implements Serializable{
         this.latitude = latitude;
     }
 
-    // auto generated getters and setters.
+    /**
+     * Returns the username
+     * @return the username
+     */
     public String getUsername() {
         return this.username;
     }
 
+    /**
+     * Sets the username
+     * @param username the new username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Returns the password
+     * @return the password
+     */
     public String getPassword() {
         return this.password;
     }
 
+    /**
+     * Sets the password
+     * @param password the new password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Gets the longitude
+     * @return the longitude
+     */
     public double getLongitude() {
         return this.longitude;
     }
 
+    /**
+     * Sets the longitude
+     * @param longitude the new longitude
+     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * Sets the latitude
+     * @return the latitude
+     */
     public double getLatitude() {
         return this.latitude;
     }
 
+    /**
+     * Sets the latitude
+     * @param latitude the new latitude
+     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
@@ -141,12 +172,12 @@ abstract public class User implements Serializable{
         setLatitude(Double.parseDouble(((TextField)userFields.get(2)).getText()));
     }
 
-    /** //TODO needs a function that takes the ArrayList and updates the user fields
+    /**
      * Returns a list of Nodes. The first node is a GridPane and should be added to the EditUserFrame.
      * The second and following Nodes are the TextFields that need to be used by the edit user frame.
      * @return An ArrayList of Nodes that always has a GridPane as its first item, and will always have at least two Nodes more than that. (long & lat)
      */
-    public ArrayList<Node> getUserFields() { //TODO need to add this method to subclasses
+    public ArrayList<Node> getUserFields() { 
 
         GridPane inputArea = new GridPane();
         inputArea.setAlignment(Pos.CENTER);

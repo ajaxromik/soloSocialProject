@@ -32,6 +32,9 @@ public class DonationView extends Application {
         launch(args);
     }
 
+    /**
+     * Tests this part of the application through javafx
+     */
     public void start(Stage mainStage) {
         buildDonationView(mainStage, UserBase.donors.values().iterator().next());
         mainStage.show();

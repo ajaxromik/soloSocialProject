@@ -18,10 +18,17 @@ import java.util.Optional;
 public class Login_Frame extends Application{
 
     // ----- testing methods -----
+    /**
+     * Tests this part of the application
+     * @param args parameters if you like
+     */
     public static void main(String[] args) {
               launch(args);
     }
     
+    /**
+     * Also tests this part of the application
+     */
     @Override
     public void start(Stage primaryStage) {
         buildLoginPage(primaryStage, new ArrayList<User>());

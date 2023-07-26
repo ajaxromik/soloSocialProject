@@ -17,11 +17,11 @@ public class Donation implements Comparable<Donation>, Serializable{
 
     /**
      * Creates a new donation and adds it to the record. 
-     * @param date
-     * @param receivingProvider
-     * @param itemType
-     * @param itemName
-     * @param quantityOfItems
+     * @param date Date of the donation
+     * @param receivingProvider The provider who receives the donation
+     * @param itemType The type of item
+     * @param itemName The name of the item
+     * @param quantityOfItems The amount of items in this donation
      */
     public Donation(LocalDate date, Provider receivingProvider, ItemType itemType, String itemName, int quantityOfItems){
         this.date = date;
@@ -32,19 +32,34 @@ public class Donation implements Comparable<Donation>, Serializable{
     }
 
 
+    /**
+     * Returns the date of the donation
+     * @return the date of the donation
+     */
     public LocalDate getDate() {
         return this.date;
     }
 
+    /**
+     * Returns the item type
+     * @return the item type
+     */
     public ItemType getItemType() {
         return this.itemType;
     }
 
+    /**
+     * Returns the item name
+     * @return the item name
+     */
     public String getItemName() {
         return this.itemName;
     }
 
-
+    /**
+     * returns the quantity of items
+     * @return the quantity of items
+     */
     public int getQuantityOfItems() {
         return this.quantityOfItems;
     }
@@ -59,6 +74,7 @@ public class Donation implements Comparable<Donation>, Serializable{
 
     /**
      * Returns info about the donation
+     * @return Info about the donation
      */
     public String toString() {
         return "\ndate: "+date+
@@ -67,6 +83,9 @@ public class Donation implements Comparable<Donation>, Serializable{
                "\nreceiver: "+receivingProvider.getUsername()+"\n";
     }
 
+    /**
+     * Compares one donation to another by order of date.
+     */
     @Override
     public int compareTo(Donation donation) {
         return date.compareTo(donation.getDate());

@@ -48,7 +48,9 @@ abstract public class UserBase {
 
     }
 
-
+    /**
+     * Serializes the static UserBase.donors
+     */
     public static void serializeDonors(){
         try{
             FileOutputStream fs = new FileOutputStream("ser/donors.ser");
@@ -61,6 +63,9 @@ abstract public class UserBase {
         }
     }
 
+    /**
+     * Serializes the static UserBase.recipients
+     */
     public static void serializeRecipients(){
         try{
             FileOutputStream fs = new FileOutputStream("ser/recipients.ser");
@@ -73,6 +78,9 @@ abstract public class UserBase {
         }
     }
 
+    /**
+     * Serializes the static UserBase.foodPantrys
+     */
     public static void serializeFoodPantrys(){
         try{
             FileOutputStream fs = new FileOutputStream("ser/foodPantrys.ser");

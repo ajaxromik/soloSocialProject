@@ -24,8 +24,8 @@ import javafx.stage.Stage;
 public class ProviderDetailsFrame extends Application{
     
     //TODO remove this
-    private final Provider TESTING = UserBase.providers.values().iterator().next();//gets one of the providers from userbase in a disgusting way
-    private final Donor TESTING2 = UserBase.donors.values().iterator().next();//gets one of the providers from userbase in a disgusting way
+    // private final Provider TESTING = UserBase.providers.values().iterator().next();//gets one of the providers from userbase in a disgusting way
+    // private final Donor TESTING2 = UserBase.donors.values().iterator().next();//gets one of the providers from userbase in a disgusting way
 
     /**
      * Tests the class
@@ -50,11 +50,11 @@ public class ProviderDetailsFrame extends Application{
     /**
      * Creates a frame for the provider; meant for testing
      */
-    public ProviderDetailsFrame() {
-        this.provider = TESTING;
-        loggedInUser = TESTING2;
-        setupControls();
-    }
+    // public ProviderDetailsFrame() {
+    //     this.provider = TESTING;
+    //     loggedInUser = TESTING2;
+    //     setupControls();
+    // }
 
     // ----- end of testing -----
 

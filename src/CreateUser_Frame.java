@@ -27,6 +27,11 @@ import java.util.HashMap;
 public class CreateUser_Frame extends Application {
 
     // ----- testing methods -----
+
+    /**
+     * Tests the frame
+     * @param args parameters if you like
+     */
     public static void main(String[] args) {
         System.out.println(USER_MAP);
         launch(args);

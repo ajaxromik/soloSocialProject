@@ -190,7 +190,7 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
      * 
      * @author William Carr
      */
-    private void buildHomePage() { //TODO split this into smaller helper methods
+    private void buildHomePage() {
         
         //creates welcome section(top left)
         Text welcomeHeader = new Text("Welcome to the FoodFinder application!");
@@ -250,7 +250,6 @@ public class HomeFrame extends Application { // TODO probably want to remove "ex
         mainPane.setVgap(10);
         mainPane.setHgap(20);
         mainPane.setAlignment(Pos.CENTER);
-        // mainPane.setGridLinesVisible(true); //TODO take this out when the application as a whole is finished entirely
 
         mainPane.add(welcome,0,0);
         mainPane.add(loginContainer, 1, 0);

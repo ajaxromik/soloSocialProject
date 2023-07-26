@@ -47,27 +47,50 @@ public class FoodPantry extends User implements Provider{
         this.details = details;
     }
 
-
+    /**
+     * Returns the inventory
+     * @return a HashMap<Item,Integer> of the inventory
+     */
     public HashMap<Item,Integer> getInventory() {
         return this.inventory;
     }
 
+    /**
+     * Sets the inventory. Should generally not be used, but might in the future.
+     * @param inventory HashMap<Item,Integer> of the inventory
+     */
     public void setInventory(HashMap<Item,Integer> inventory) {
         this.inventory = inventory;
     }
 
+    /**
+     * Returns the name of the foodpantry location
+     * @return the String name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Sets the name of the foodpantry location
+     * @param name the String name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the details of the foodpantry location
+     * @return the String of details
+     */
     public String getDetails(){
         return details;
     }
 
+    /**
+     * Sets the details of the foodpantry location
+     * @param details the details of the location
+     */
     public void setDetails(String details) {
         this.details = details;
     }
